@@ -1,0 +1,12 @@
+*.pyc
+.idea
+.ipynb_checkpoints/
+.RData
+.Rhistory
+*.bak
+*.swp
+.DS_Store
+__pycache__/
+output/
+pelican.pid
+srv.pid
