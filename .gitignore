@@ -1,6 +1,7 @@
 *.pyc
 .idea
 .ipynb_checkpoints/
+eda/.ipynb_checkpoints/
 .RData
 .Rhistory
 *.bak
@@ -8,5 +9,6 @@
 .DS_Store
 __pycache__/
 output/
+*.pdf
 pelican.pid
 srv.pid
