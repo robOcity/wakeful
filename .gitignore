@@ -1,4 +1,7 @@
 *.pyc
+.cache/*
+test/.cache/
+test/__pycache__/
 .idea
 .ipynb_checkpoints/
 eda/.ipynb_checkpoints/
