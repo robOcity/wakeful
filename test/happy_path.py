@@ -2,7 +2,7 @@ import os
 import pandas as pd
 import numpy as np
 import pytest
-import
+from wakeful import
 
 
 def test_bro_log_to_df():

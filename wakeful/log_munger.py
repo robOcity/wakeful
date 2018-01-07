@@ -12,7 +12,7 @@ def bro_logs_to_df(top_level_dir, log_kind):
     df = pd.DataFrame()
     for log in logs:
         log_df = bro_log_to_df(log)
-        # TODO: Fix hack to get to a pandas.DataFrame from a bat.log_to_dataframe.LogToDataFrame
+        # TODO: Improve getting pandas.DataFrame from bat.log_to_dataframe.LogToDataFrame
         pandas_df = log_df.dropna(axis=1)
         # Note: pandas_df.shape == log_df.shape
         df = df.append(pandas_df)
