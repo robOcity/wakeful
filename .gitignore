@@ -12,3 +12,4 @@ output/
 *.pdf
 pelican.pid
 srv.pid
+*.log
