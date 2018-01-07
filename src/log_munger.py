@@ -26,6 +26,14 @@ def make_log_list(top_level_dir, log_kind):
     return paths
 
 
+def df_to_json(df, path, orient='table', date_format='iso'):
+    df.to_json(path_or_buf=path, orient=orient, date_format=date_format)
+
+
+def json_to_df(path, orient='table'):
+    return pd.read_json(path_or_buf=path, orient=orient, convert_dates=True)
+
+
 if __name__ == '__main__':
     bro_log_path = '../data/dns.06:00:00-07:00:00.log'
     bro_log_df = bro_log_to_df(bro_log_path)

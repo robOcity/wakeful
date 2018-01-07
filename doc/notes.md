@@ -13,6 +13,8 @@
 * Overwriting existing `gzip -rdf 2017-12-22/dns.*`
     - `f` don't ask permission
 * Recursively removing files using `find . -type f -name "*.gz" -delete`
+* Counting the number of events: `find data/home/2017-12-31 -type f -name "*dns*log" | xargs wc -l`
+
 
 
 
