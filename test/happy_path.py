@@ -5,22 +5,26 @@ import pytest
 from wakeful import log_munger
 
 
-def test_bro_log_to_df():
-    file_path = 'data/home/2017-12-31/dns.06:00:00-07:00:00.log'
+@pytest.fixture()
+def data_dir():
+    return '../data/home/2017-12-31/'
+
+
+def test_bro_log_to_df(data_dir):
+    file_path = os.path.join(data_dir, 'dns.06:00:00-07:00:00.log')
     bro_df = log_munger.bro_log_to_df(file_path)
     assert(isinstance(bro_df, pd.core.frame.DataFrame))
     assert((1085, 23) == bro_df.shape)
 
 
-def test_make_log_list_one_dir():
-    top_level_dir = 'data/home/2017-12-31/'
-    log_kind = 'dns'
-    log_list = log_munger.make_log_list(top_level_dir, log_kind)
+def test_make_log_list_one_dir(data_dir):
+    log_type = 'dns'
+    log_list = log_munger.make_log_list(os.path.join(data_dir), log_type)
     assert(len(log_list) == 23)
-    assert(all((log_kind in f for f in log_list)))
+    assert(all((log_type in f for f in log_list)))
 
 
-def test_bro_logs_to_df():
+def test_bro_logs_to_df(data_dir):
     """
     The dns.log file has 23 columns
     Find number of lines in the log files:
@@ -29,9 +33,9 @@ def test_bro_logs_to_df():
     31813 <-- 32020 - 23 * 9
     So, I believe this result is correct
     """
-    top_level_dir = 'data/home/2017-12-31/'
-    log_kind = 'dns'
-    bro_df = log_munger.bro_logs_to_df(top_level_dir, log_kind)
+    log_type = 'dns'
+    bro_df = log_munger.bro_logs_to_df(os.path.join(data_dir), log_type)
+    bro_df = log_munger.bro_logs_to_df(os.path.join(data_dir), log_type)
     assert((31813, 23) == bro_df.shape)
 
 
