@@ -6,14 +6,14 @@ from wakeful import log_munger
 
 
 def test_bro_log_to_df():
-    file_path = '../data/home/2017-12-31/dns.06:00:00-07:00:00.log'
+    file_path = 'data/home/2017-12-31/dns.06:00:00-07:00:00.log'
     bro_df = log_munger.bro_log_to_df(file_path)
-    assert(isinstance(bro_df, pandas.core.frame.DataFrame))
+    assert(isinstance(bro_df, pd.core.frame.DataFrame))
     assert((1085, 23) == bro_df.shape)
 
 
 def test_make_log_list_one_dir():
-    top_level_dir = '../data/home/2017-12-31/'
+    top_level_dir = 'data/home/2017-12-31/'
     log_kind = 'dns'
     log_list = log_munger.make_log_list(top_level_dir, log_kind)
     assert(len(log_list) == 23)
@@ -29,41 +29,40 @@ def test_bro_logs_to_df():
     31813 <-- 32020 - 23 * 9
     So, I believe this result is correct
     """
-    top_level_dir = '../data/home/2017-12-31/'
+    top_level_dir = 'data/home/2017-12-31/'
     log_kind = 'dns'
     bro_df = log_munger.bro_logs_to_df(top_level_dir, log_kind)
     assert((31813, 23) == bro_df.shape)
 
 
-@pytest.fixture
-def get_df():
-    dft = pd.DataFrame(np.random.randn(100000, 1),
+@pytest.fixture()
+def expected_df():
+    ROWS = 10
+    return pd.DataFrame(np.random.randn(ROWS, 1),
                        columns=['A'],
-                       index=pd.date_range('20170101', periods=100000, freq='T'))
-    return dft.to_json(orient='table')
+                       index=pd.date_range('20170101', periods=ROWS, freq='T'))
 
 
-@pytest.fixture
+@pytest.fixture(scope='session')
 def test_dir(tmpdir_factory):
     test_dir = tmpdir_factory.mktemp('temp')
     return test_dir
 
 
-@pytest.fixture
-def json_path(test_dir):
-    test_filepath = test_dir.join('test_df.json')
+@pytest.fixture(scope='session')
+def persist_path(test_dir):
+    test_filepath = test_dir.join('persistent_log_store.h5')
     return test_filepath
 
 
-@pytest.fixture
-def test_df_to_json(json_path, create_df):
-    log_munger.df_to_json(get_df, json_path)
-    assert(os.path.isfile(json_path))
+def test_df_to_hdf5(persist_path, expected_df):
+    log_munger.df_to_hdf5(expected_df, persist_path)
+    assert(os.path.isfile(persist_path))
 
 
+def test_hdf5_to_df(persist_path, expected_df):
+    log_munger.df_to_hdf5(expected_df, persist_path)
+    actual_df = log_munger.hdf5_to_df(persist_path)
+    assert(expected_df.shape == actual_df.shape)
+    assert(expected_df.equals(actual_df))
 
-# @pytest.fixture
-# def test_df_to_json(tmpdir_factory):
-#     persisted_json_path = test_dir.join('persisted')
-#     log_munger.df_to_json(df, persisted_json_path)
-#     assert(os.path.isfile(persisted_json_path))
