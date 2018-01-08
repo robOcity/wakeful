@@ -26,8 +26,8 @@ def make_log_list(top_level_dir, log_kind):
     return paths
 
 
-def df_to_hdf5(df, path):
-    df.to_hdf(path, 'table', append=False)
+def df_to_hdf5(df, path, append=False):
+    df.to_hdf(path, 'table', append=append)
 
 
 def hdf5_to_df(path):
