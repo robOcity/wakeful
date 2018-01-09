@@ -1,4 +1,5 @@
 import os
+import glob
 import pandas as pd
 from bat.log_to_dataframe import LogToDataFrame
 
@@ -31,7 +32,7 @@ def bro_logs_to_df(top_level_dir, log_type):
     return df
 
 
-def make_log_list(root_dir, log_type):
+def make_log_list(log_root_dir, log_type):
     """
     Builds a list of Bro log files by recursively searching all subdirectories under
     the root directory.
@@ -39,10 +40,9 @@ def make_log_list(root_dir, log_type):
     :param log_type: Name of the Bro log file to load (e.g., dns)
     :return: List of paths to log file that were found
     """
-    paths = []                                                           
-    for rs, ds, fs in os.walk(root_dir):
-        paths.extend([os.path.join(root_dir, f) for f in fs if log_type in f])
-    return paths
+    path = os.path.join(f'{log_root_dir}', f'**/*{log_type}*.log')
+    results = glob.glob(path, recursive=True)
+    return results
 
 
 def df_to_hdf5(df, path, append=False):

@@ -10,6 +10,11 @@ def data_dir():
     return '../data/home/2017-12-31/'
 
 
+@pytest.fixture()
+def c2_data_dir():
+    return '../data/c2'
+
+
 def test_bro_log_to_df(data_dir):
     file_path = os.path.join(data_dir, 'dns.06:00:00-07:00:00.log')
     bro_df = log_munger.bro_log_to_df(file_path)
@@ -17,10 +22,17 @@ def test_bro_log_to_df(data_dir):
     assert((1085, 23) == bro_df.shape)
 
 
-def test_make_log_list_one_dir(data_dir):
-    log_type = 'dns'
+def test_make_log_list(data_dir):
+    log_type = 'conn'
     log_list = log_munger.make_log_list(os.path.join(data_dir), log_type)
     assert(len(log_list) == 23)
+    assert(all((log_type in f for f in log_list)))
+
+
+def test_make_log_list_recursive(c2_data_dir):
+    log_type = 'conn'
+    log_list = log_munger.make_log_list(c2_data_dir, log_type)
+    assert(len(log_list) == 5)
     assert(all((log_type in f for f in log_list)))
 
 
@@ -34,7 +46,6 @@ def test_bro_logs_to_df(data_dir):
     So, I believe this result is correct
     """
     log_type = 'dns'
-    bro_df = log_munger.bro_logs_to_df(os.path.join(data_dir), log_type)
     bro_df = log_munger.bro_logs_to_df(os.path.join(data_dir), log_type)
     assert((31813, 23) == bro_df.shape)
 
