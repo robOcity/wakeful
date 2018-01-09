@@ -7,12 +7,12 @@ from wakeful import log_munger
 
 @pytest.fixture()
 def data_dir():
-    return '../data/home/2017-12-31/'
+    return 'data/home/2017-12-31/'
 
 
 @pytest.fixture()
 def c2_data_dir():
-    return '../data/c2'
+    return 'data/c2'
 
 
 def test_bro_log_to_df(data_dir):

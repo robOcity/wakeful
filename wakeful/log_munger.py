@@ -22,6 +22,7 @@ def bro_logs_to_df(top_level_dir, log_type):
     :return:
     """
     logs = make_log_list(top_level_dir, log_type)
+    print(f'Logs: {logs}')
     df = pd.DataFrame()
     for log in logs:
         log_df = bro_log_to_df(log)
@@ -40,6 +41,7 @@ def make_log_list(log_root_dir, log_type):
     :param log_type: Name of the Bro log file to load (e.g., dns)
     :return: List of paths to log file that were found
     """
+    cwd = os.getcwd()
     path = os.path.join(f'{log_root_dir}', f'**/*{log_type}*.log')
     results = glob.glob(path, recursive=True)
     return results
@@ -62,3 +64,8 @@ def hdf5_to_df(path):
     :return: Retrieved DataFrame object
     """
     return pd.read_hdf(path, 'table')
+
+
+if __name__ == '__main__':
+    cwd = os.getcwd()
+    print(cwd)
