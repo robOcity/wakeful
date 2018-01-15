@@ -22,12 +22,11 @@ def bro_logs_to_df(top_level_dir, log_type):
     :return:
     """
     logs = make_log_list(top_level_dir, log_type)
-    print(f'Logs: {logs}')
     df = pd.DataFrame()
     for log in logs:
         log_df = bro_log_to_df(log)
-        # TODO: Improve getting pandas.DataFrame from bat.log_to_dataframe.LogToDataFrame
-        pandas_df = log_df.dropna(axis=1)
+        # TODO: Get a pandas reference, not a bat reference, bat objects don't functions as dataframes
+        pandas_df = log_df.dropna(axis=1) # hack to get a pandas dataframe with ALL columns
         # Note: pandas_df.shape == log_df.shape
         df = df.append(pandas_df)
     return df
@@ -47,23 +46,39 @@ def make_log_list(log_root_dir, log_type):
     return results
 
 
-def df_to_hdf5(df, path, append=False):
+def generate_pcr_feature(df, column_name='pcr'):
+    """
+    Calculate the producer-consumer-ratio for the dataframe.  The dataframe needs
+    to have the orig_bytes and resp_bytes fields from the th conn log.  If so,
+    a new 'pcr' column will be added, otherwise the dataframe will remain unchanged.
+    :param df: Dataframe to mutate
+    :param column_name: Column name holding the PCR values (default is 'pcr')
+    """
+    if 'orig_bytes' in df.columns and 'resp_bytes' in df.columns:
+        numerator = (df.orig_bytes - df.resp_bytes)
+        denominator = (df.orig_bytes + df.resp_bytes)
+        df[column_name] = numerator / denominator
+
+
+def df_to_hdf5(df, key, dir_path):
     """
     Save the DataFrame object as an HDF5 file.
     :param df: DataFrame to save as a file
-    :param path: Path to directory of where to save the file
-    :param append: 'True' appends to the file, 'False' overwrites it
+    :param key: ID for storage and retrieval
+    :param dir_path: Path to directory of where to save the file
     """
-    df.to_hdf(path, 'table', append=append)
+    file_path = os.path.join(dir_path, key + '.h5')
+    df.to_hdf(file_path, key, complevel=9, complib='zlib')
 
 
-def hdf5_to_df(path):
+def hdf5_to_df(dir_path, key):
     """
     Retrieve the persisted DataFrame object from the HDF5 file.
     :param path: Path to directory of where to save the file
     :return: Retrieved DataFrame object
     """
-    return pd.read_hdf(path, 'table')
+    file_path = os.path.join(dir_path, key + '.h5')
+    return pd.read_hdf(file_path, key)
 
 
 if __name__ == '__main__':
