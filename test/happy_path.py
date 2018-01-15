@@ -38,12 +38,11 @@ def test_make_log_list_recursive(c2_data_dir):
 
 def test_bro_logs_to_df(data_dir):
     """
-    The dns.log file has 23 columns
-    Find number of lines in the log files:
-    32020 <-- find data/home/2017-12-31 -type f -name "*dns*log" | xargs wc -l
-    Bro logs have 9 lines that are not data per log (8 comments at the the top and 1 at the bottom)
-    31813 <-- 32020 - 23 * 9
-    So, I believe this result is correct
+    23 dns.log files <-- find data/home/2017-12-31 -type f -name "*dns*log" | wc -l
+    32020 lines in these files <-- find data/home/2017-12-31 -type f -name "*dns*log" | xargs wc -l
+    Bro logs have 9 comment lines per log (8 top + 1 bottom)
+    Number of rows --expect --> 31813 <-- 32020 - 23 files * 9 comments / file
+    Number of columns --expect --> 23 since that is the number of columns in the dns log
     """
     log_type = 'dns'
     bro_df = log_munger.bro_logs_to_df(os.path.join(data_dir), log_type)
@@ -80,4 +79,3 @@ def test_hdf5_to_df(persist_path, expected_df):
     actual_df = log_munger.hdf5_to_df(persist_path)
     assert(expected_df.shape == actual_df.shape)
     assert(expected_df.equals(actual_df))
-
