@@ -1,4 +1,4 @@
-# Wakeful - A watch dog for your DNS traffic
+# Wakeful - A watch dog for DNS traffic
 
 Rob Osterburg, Galvanize DSI Fellow
 

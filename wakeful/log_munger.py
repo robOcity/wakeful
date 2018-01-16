@@ -4,6 +4,7 @@ import pandas as pd
 from bat.log_to_dataframe import LogToDataFrame
 from sklearn.model_selection import train_test_split
 from sklearn.utils import resample
+from collections import defaultdict
 
 RAND_SEED_VAL = 42
 
@@ -49,37 +50,26 @@ def make_log_list(log_root_dir, log_type):
     return results
 
 
-def generate_pcr_feature(df, column_name='pcr'):
-    """
-    Calculate the producer-consumer-ratio for the dataframe.  The dataframe needs
-    to have the orig_bytes and resp_bytes fields from the th conn log.  If so,
-    a new 'pcr' column will be added, otherwise the dataframe will remain unchanged.
-    :param df: Dataframe to mutate
-    :param column_name: Column name holding the PCR values (default is 'pcr')
-    """
-    if 'orig_bytes' in df.columns and 'resp_bytes' in df.columns:
-        numerator = (df.orig_bytes - df.resp_bytes)
-        denominator = (df.orig_bytes + df.resp_bytes)
-        df[column_name] = numerator / denominator
-
-
 def df_to_hdf5(df, key, dir_path):
     """
-    Save the DataFrame object as an HDF5 file.
+    Save the DataFrame object as an HDF5 file. The file is stored
+    in the directory specified and uses the key for the filename
+    and 'h5' as the extension.
     :param df: DataFrame to save as a file
     :param key: ID for storage and retrieval
-    :param dir_path: Path to directory of where to save the file
+    :param dir_path: Directory to store the HDF5 data file
     """
     file_path = os.path.join(dir_path, key + '.h5')
     df.to_hdf(file_path, key, complevel=9, complib='zlib')
 
 
-def hdf5_to_df(dir_path, key):
+def hdf5_to_df(key, dir_path):
     """
     Retrieve the persisted DataFrame object from the HDF5 file.
-    :param path: Path to directory of where to save the file
-    :return: Retrieved DataFrame object
+    :param dir_path: Directory to store the HDF5 data file
+    :return: Retrieved pandas DataFrame object
     """
+    # TODO DRY --> make into function
     file_path = os.path.join(dir_path, key + '.h5')
     return pd.read_hdf(file_path, key)
 
@@ -92,20 +82,29 @@ def rebalance(df, column_name='label'):
     :param target: Name of the column holding the labels
     :return: rebalanced data frame with rows added to the minority class
     """
-    # split the data
-    train, test = train_test_split(df, random_state=RAND_SEED_VAL, test_size=0.5)
-
     # balance classes by upsampling with replacement
-    train_majority = train[train[column_name]==0]
-    train_minority = train[train[column_name]==1]
-    train_deficit = len(train_majority) - len(train_minority)
-    train_minority_rebalanced = resample(train_minority,
-                                    replace=True,
-                                    random_state=RAND_SEED_VAL,
-                                    n_samples=len(train_majority))
+    df_neg = df[df[column_name] == 0]
+    df_pos = df[df[column_name] == 1]
+    num_to_gen = abs(df_neg.shape[0] - df_pos.shape[0])
+    df_pos_rebalanced = resample(df_pos,
+                                 replace=True,
+                                 random_state=RAND_SEED_VAL,
+                                 n_samples=num_to_gen)
 
     # create the balanced data set
-    return train_majority.append(train_minority_rebalanced)
+    result = df_neg.append(df_pos_rebalanced)
+    return num_to_gen, df_neg, df_pos, df_pos_rebalanced, result
+
+
+def split_train_test(df, test_size=0.5):
+    """
+    Split the dataframe into a training and test in the desired proportion.
+    :param df: pandas dataframe to split_train_test
+    :param test_size: proportion of the sample to allocate to test
+    :return: train, test dataframes
+    """
+    # split the data
+    return train_test_split(df, random_state=RAND_SEED_VAL, test_size=test_size)
 
 
 def split_X_y(df, column_name='label'):
@@ -115,23 +114,26 @@ def split_X_y(df, column_name='label'):
     :param target: Name of the column holding the labels
     :return: tuple containing X, y values
     """
+    if column_name not in df.columns:
+        return df, None
     y = df.pop([column_name])
     return df, y
 
 
-def find_column_by_type(df, type):
-    """Finds the columns in a pandas dataframe of a particular type.
+def find_columns_by_type(df, type):
+    """
+    Finds the columns in a pandas dataframe of a particular type.
     :param df:  pandas dataframe to searching
-    :param type: type of columns to find ('int64', 'float42', 'object', 'timedelta64', ...)
+    :param type: type of columns to find ('int64', 'float42', 'object', 'timedelta64[ns]', ...)
     :return: list of columns names of the type requested, or an empty list if none are found.
     """
     df_types = defaultdict(list)
     grp = df.columns.to_series().groupby(df.dtypes).groups
     df_types.update({k.name: v.values for k, v in grp.items()})
-    return list(df[type])
+    return df_types.get(type)
 
 
-def calc_prc(df, src_bytes_col='orig_bytes', dest_bytes_col='resp_bytes'):
+def calc_pcr(df, src_bytes_col='orig_bytes', dest_bytes_col='resp_bytes'):
     """
     Calculate the producer-consumer ratio for network connections.  The PCR is ratio
     is -1.0 for consumers and 1.0 for producers.  PCR is independent from the speed
@@ -141,7 +143,8 @@ def calc_prc(df, src_bytes_col='orig_bytes', dest_bytes_col='resp_bytes'):
     :param dest_bytes_col: column name with the number of bytes sent by the destination
     :return: pandas series containing the pcr values
     """
-    numerator = norm_df.orig_bytes - norm_df.resp_bytes
-    denominator = norm_df.orig_bytes + norm_df.resp_bytes
-    result = numerator / denominator if denomerator != 0 and denominator != 0 else np.nan
-    return result
+    return (df[src_bytes_col] - df[dest_bytes_col]) / (df[src_bytes_col] + df[dest_bytes_col])
+
+
+def build_labeled_set(class_0_dir, class_1_dir):
+    pass
