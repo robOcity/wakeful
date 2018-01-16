@@ -16,3 +16,4 @@ output/
 pelican.pid
 srv.pid
 *.log
+*.h5

@@ -2,7 +2,10 @@ import os
 import glob
 import pandas as pd
 from bat.log_to_dataframe import LogToDataFrame
+from sklearn.model_selection import train_test_split
+from sklearn.utils import resample
 
+RAND_SEED_VAL = 42
 
 def bro_log_to_df(file_path):
     """
@@ -81,6 +84,64 @@ def hdf5_to_df(dir_path, key):
     return pd.read_hdf(file_path, key)
 
 
-if __name__ == '__main__':
-    cwd = os.getcwd()
-    print(cwd)
+def rebalance(df, column_name='label'):
+    """
+    Adds minority class values by resampling with replacement.
+    Apply this function to TRAINING data only, not testing!
+    :param df: pandas dataframe to balance
+    :param target: Name of the column holding the labels
+    :return: rebalanced data frame with rows added to the minority class
+    """
+    # split the data
+    train, test = train_test_split(df, random_state=RAND_SEED_VAL, test_size=0.5)
+
+    # balance classes by upsampling with replacement
+    train_majority = train[train[column_name]==0]
+    train_minority = train[train[column_name]==1]
+    train_deficit = len(train_majority) - len(train_minority)
+    train_minority_rebalanced = resample(train_minority,
+                                    replace=True,
+                                    random_state=RAND_SEED_VAL,
+                                    n_samples=len(train_majority))
+
+    # create the balanced data set
+    return train_majority.append(train_minority_rebalanced)
+
+
+def split_X_y(df, column_name='label'):
+    """
+    Split the data into a feature values (X) and targets or labels (y).
+    :param df: pandas dataframe to split
+    :param target: Name of the column holding the labels
+    :return: tuple containing X, y values
+    """
+    y = df.pop([column_name])
+    return df, y
+
+
+def find_column_by_type(df, type):
+    """Finds the columns in a pandas dataframe of a particular type.
+    :param df:  pandas dataframe to searching
+    :param type: type of columns to find ('int64', 'float42', 'object', 'timedelta64', ...)
+    :return: list of columns names of the type requested, or an empty list if none are found.
+    """
+    df_types = defaultdict(list)
+    grp = df.columns.to_series().groupby(df.dtypes).groups
+    df_types.update({k.name: v.values for k, v in grp.items()})
+    return list(df[type])
+
+
+def calc_prc(df, src_bytes_col='orig_bytes', dest_bytes_col='resp_bytes'):
+    """
+    Calculate the producer-consumer ratio for network connections.  The PCR is ratio
+    is -1.0 for consumers and 1.0 for producers.  PCR is independent from the speed
+    of the network.
+    :param df: pandas dataframe
+    :param src_bytes_col: name of column with the number of bytes sent by the source
+    :param dest_bytes_col: column name with the number of bytes sent by the destination
+    :return: pandas series containing the pcr values
+    """
+    numerator = norm_df.orig_bytes - norm_df.resp_bytes
+    denominator = norm_df.orig_bytes + norm_df.resp_bytes
+    result = numerator / denominator if denomerator != 0 and denominator != 0 else np.nan
+    return result
