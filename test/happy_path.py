@@ -2,7 +2,7 @@ import os
 import pandas as pd
 import numpy as np
 import pytest
-from wakeful import log_munger
+from wakeful import log_munger, metrics
 
 
 @pytest.fixture()
@@ -69,13 +69,25 @@ def persist_path(test_dir):
     return test_filepath
 
 
-def test_df_to_hdf5(persist_path, expected_df):
-    log_munger.df_to_hdf5(expected_df, persist_path)
-    assert(os.path.isfile(persist_path))
+def test_df_to_hdf5(test_dir, expected_df):
+    key = 'key_value_and_filename'
+    filepath = log_munger.df_to_hdf5(expected_df, key, test_dir)
+    assert(os.path.isfile(filepath))
 
 
-def test_hdf5_to_df(persist_path, expected_df):
-    log_munger.df_to_hdf5(expected_df, persist_path)
-    actual_df = log_munger.hdf5_to_df(persist_path)
+def test_hdf5_to_df(test_dir, expected_df):
+    key = 'key_value_and_filename'
+    log_munger.df_to_hdf5(expected_df, key, test_dir)
+    actual_df = log_munger.hdf5_to_df(key, test_dir)
     assert(expected_df.shape == actual_df.shape)
     assert(expected_df.equals(actual_df))
+
+
+def test_calc_entropy_low():
+    uniform = 'ccccccccccccc'
+    assert(abs(metrics.calc_entropy(uniform)) == 0.0)
+
+
+def test_calc_entropy_high():
+    rubbish = 'bpaopw5h;lna v08pqo5iup6b2pw96fy09 yr4tp   i5h'
+    assert(abs(metrics.calc_entropy(rubbish)) > 1.0)

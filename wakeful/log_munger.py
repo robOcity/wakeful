@@ -61,6 +61,7 @@ def df_to_hdf5(df, key, dir_path):
     """
     file_path = os.path.join(dir_path, key + '.h5')
     df.to_hdf(file_path, key, complevel=9, complib='zlib')
+    return file_path
 
 
 def hdf5_to_df(key, dir_path):
@@ -131,19 +132,6 @@ def find_columns_by_type(df, type):
     grp = df.columns.to_series().groupby(df.dtypes).groups
     df_types.update({k.name: v.values for k, v in grp.items()})
     return df_types.get(type)
-
-
-def calc_pcr(df, src_bytes_col='orig_bytes', dest_bytes_col='resp_bytes'):
-    """
-    Calculate the producer-consumer ratio for network connections.  The PCR is ratio
-    is -1.0 for consumers and 1.0 for producers.  PCR is independent from the speed
-    of the network.
-    :param df: pandas dataframe
-    :param src_bytes_col: name of column with the number of bytes sent by the source
-    :param dest_bytes_col: column name with the number of bytes sent by the destination
-    :return: pandas series containing the pcr values
-    """
-    return (df[src_bytes_col] - df[dest_bytes_col]) / (df[src_bytes_col] + df[dest_bytes_col])
 
 
 def build_labeled_set(class_0_dir, class_1_dir):
