@@ -3,6 +3,8 @@ A module to calculate metrics based on the DNS and connection logs produced
 by the Bro Network Security Monitor.
 """
 import math
+import json
+import numpy as np
 
 
 def calc_pcr(df, src_bytes_col='orig_bytes', dest_bytes_col='resp_bytes'):
@@ -36,3 +38,16 @@ def calc_entropy(data, base=2):
     # calculate shannon entropy
     H = -sum([freq  * math.log(freq) / math.log(base) for freq in frequencies ])
     return H
+
+
+def calc_url_reputation(vt_json):
+    """
+    Calculate the reputation of a URL based on the VirusTotal.com JSON data.
+    the JSON response for this URL from VirusTotal.com.
+    :param vt_json: VirusTotal.com JSON response to be processed
+    :return: Reputation of the URL where 0.0 is best and 1.0 is worst.
+    """
+    url_rep = json.loads(vt_json)
+    positives = int(url_rep.get('positives'))
+    total = int(url_rep.get('total'))
+    return positives / total if total else np.nan
