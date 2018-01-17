@@ -48,6 +48,8 @@ def calc_url_reputation(vt_json):
     :return: Reputation of the URL where 0.0 is best and 1.0 is worst.
     """
     url_rep = json.loads(vt_json)
-    positives = int(url_rep.get('positives'))
-    total = int(url_rep.get('total'))
-    return positives / total if total else np.nan
+    positives = url_rep.get('positives')
+    positives = int(positives) if positives else 0
+    total = url_rep.get('total')
+    total = int(total) if total else 0
+    return positives / total if bool(total) else np.nan
