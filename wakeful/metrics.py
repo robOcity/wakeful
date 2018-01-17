@@ -4,6 +4,7 @@ by the Bro Network Security Monitor.
 """
 import math
 
+
 def calc_pcr(df, src_bytes_col='orig_bytes', dest_bytes_col='resp_bytes'):
     """
     Calculate the producer-consumer ratio for network connections.  The PCR is ratio
