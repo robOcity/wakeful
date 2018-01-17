@@ -17,3 +17,4 @@ pelican.pid
 srv.pid
 *.log
 *.h5
+test/driver_app.py

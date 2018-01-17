@@ -10,7 +10,6 @@ class ApiRegistration(abc.ABC):
         self.api_key = self.lookup(self.api_key_env_var)
         self.base_url = base_url
 
-
     def lookup(self, env_var):
         """
         Search the current runtime environment for the environment
@@ -21,9 +20,8 @@ class ApiRegistration(abc.ABC):
         env_value = os.getenv(env_var)
         return env_value if env_value else None
 
-    def get_base_url():
+    def get_base_url(self):
         """
         Retrieves the base URL for the RESTful API.
         """
         return self.base_url
-        
