@@ -5,6 +5,9 @@ by the Bro Network Security Monitor.
 import math
 import json
 import numpy as np
+import whois
+import datetime
+import dateutil.parser
 
 
 def calc_pcr(df, src_bytes_col='orig_bytes', dest_bytes_col='resp_bytes'):
@@ -53,3 +56,28 @@ def calc_url_reputation(vt_json):
     total = url_rep.get('total')
     total = int(total) if total else 0
     return positives / total if bool(total) else np.nan
+
+
+def is_new_url(url, num_days=100, set_current_date=None):
+    """
+    Classify whether a web site has been created recently or not.
+    If the URL has both a creation date and a domain name then a
+    boolean value will be returned.
+    :param url: URL to resolve using DNS
+    :param num_days: If a URL was created less than this many days ago, then
+    consider it to be new.
+    :param use_as_current_date: Provide an ISO formatted string (ISO8601) to
+    reset the current date, otherwise today is used.  Obtain with
+    datetime.isoformat() that returns a value such as '2014-06-28T12:01:00'.
+    :return: True if the URL creation date is less than num_days old,
+    otherwise False
+    """
+    url_info = whois.whois(url)
+    if not(bool(url_info.domain) and bool(url_info.creation_date)):
+        return np.nan
+    if set_current_date:
+        comparison_date = dateutil.parser.parse(set_current_date)
+    else:
+        comparison_date = datetime.today()
+    delta = comparison_date - url_info.creation_date
+    return delta < datetime.timedelta(days=num_days)

@@ -14,7 +14,6 @@ class VirusTotal(ApiRegistration):
     def get_url_reputation(self, url):
         params = {'resource': url, 'apikey': self.api_key}
         vt_url = self.get_base_url() + '/url/report'
-        print(vt_url)
         response = requests.post(vt_url, data=params)
         response.raise_for_status()
         return response
