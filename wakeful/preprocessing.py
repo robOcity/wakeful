@@ -9,28 +9,35 @@ from . import log_munger, metrics
 
 def pipeline(dir_pairs, log_types):
 
+    # TODO update functions that mutate dataframe to not have return statements
     kv_pairs = []
-    for norm_dir, mal_dir in dir_pairs:
+    for mal_dir, norm_dir in dir_pairs:
         norm_base, mal_base = os.path.basename(norm_dir), os.path.basename(mal_dir)
-        # TODO update functions that mutate dataframe to not have return statements
 
         for log_type in log_types:
+            # process logs representing normal traffic
             logs = log_munger.make_log_list(norm_dir, log_type)
             if not logs:
                 continue
             norm_df = log_munger.bro_logs_to_df(norm_dir, log_type, logs=logs)
+
+            # process logs representing attack traffic
             logs = log_munger.make_log_list(mal_dir, log_type)
             if not logs:
                 continue
             mal_df = log_munger.bro_logs_to_df(mal_dir, log_type, logs=logs)
+
+            # add class labels to the data
             label_data(norm_df, mal_df)
             df = combine_dfs(norm_df, mal_df)
 
+            # metrics depend on specific data fields
             if log_type.lower() == 'conn':
                 df['pcr'] = metrics.calc_pcr(df)
             elif log_type.lower() == 'dns':
                 df['query_entropy'] = df['query'].apply(metrics.calc_entropy)
 
+            # rebalance the training data
             train, test = train_test_rebalance_split(df)
             kv_pairs.append((norm_base + '-' + mal_base + '-' + log_type, (train, test)))
 
