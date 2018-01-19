@@ -80,9 +80,15 @@ def test_calc_entropy_low():
     assert(abs(metrics.calc_entropy(uniform)) == 0.0)
 
 
+def test_calc_pcr(pseudo_conn_log_df):
+    df = metrics.calc_pcr(pseudo_conn_log_df)
+    assert(df.loc['a'] == pytest.approx(-1/3))
+
+
 def test_calc_entropy_high():
     rubbish = 'bpaopw5h;lna v08pqo5iup6b2pw96fy09 yr4tp   i5h'
     assert(abs(metrics.calc_entropy(rubbish)) > 1.0)
+
 
 def test_calc_url_rep(json_good_rep):
     assert(metrics.calc_url_reputation(json_good_rep) == 0.0)
@@ -99,6 +105,11 @@ def test_is_new_url():
 
 
 # Fixtures -----------------------------------------------------------------
+@pytest.fixture()
+def pseudo_conn_log_df():
+    return pd.DataFrame({'orig_bytes' : 5., 'resp_bytes' : 10.}, index=['a', 'b'])
+
+
 @pytest.fixture()
 def expected_df():
     ROWS = 10

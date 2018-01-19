@@ -8,6 +8,7 @@ from collections import defaultdict
 
 RAND_SEED_VAL = 42
 
+
 def bro_log_to_df(file_path):
     """
     Load a Bro log in to a pandas DataFrame object.
@@ -17,7 +18,7 @@ def bro_log_to_df(file_path):
     return LogToDataFrame(file_path)
 
 
-def bro_logs_to_df(top_level_dir, log_type):
+def bro_logs_to_df(top_level_dir, log_type, logs=None):
     """
     Recursively find log files and load them into a DataFrame object.  Only log files
     that contain the given log name will be loaded.
@@ -25,7 +26,8 @@ def bro_logs_to_df(top_level_dir, log_type):
     :param log_type: Name of the Bro log file to load (e.g., dns)
     :return:
     """
-    logs = make_log_list(top_level_dir, log_type)
+    if not logs:
+        logs = make_log_list(top_level_dir, log_type)
     df = pd.DataFrame()
     for log in logs:
         log_df = bro_log_to_df(log)
@@ -94,7 +96,7 @@ def rebalance(df, column_name='label'):
 
     # create the balanced data set
     result = df_neg.append(df_pos_rebalanced)
-    return num_to_gen, df_neg, df_pos, df_pos_rebalanced, result
+    return result
 
 
 def split_train_test(df, test_size=0.5):

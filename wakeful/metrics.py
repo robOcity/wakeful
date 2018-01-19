@@ -20,7 +20,13 @@ def calc_pcr(df, src_bytes_col='orig_bytes', dest_bytes_col='resp_bytes'):
     :param dest_bytes_col: column name with the number of bytes sent by the destination
     :return: pandas series containing the pcr values
     """
-    return (df[src_bytes_col] - df[dest_bytes_col]) / (df[src_bytes_col] + df[dest_bytes_col])
+    try:
+        return (df[src_bytes_col] - df[dest_bytes_col]) / (df[src_bytes_col] + df[dest_bytes_col])
+    except ValueError as e:
+        fmt = f"Expected '{src_bytes_col}' and '{dest_bytes_col}' to be in dataframe, not {df.columns}."
+        print(fmt, file=sys.stderr)
+        raise e
+
 
 
 def calc_entropy(data, base=2):
