@@ -1,3 +1,12 @@
+"""
+Converts pandas dataframes to numpy matrices and back again.
+Based on code from Tom Augsperger's github repository (https://github.com/TomAugspurger/mtg) and
+talk at PyData Chicago 2016 (https://youtu.be/KLPtEBokqQ0).  Added a map of columns in the dataframe
+to those in the matrix.  This information is held in the DummyEncoder.matrix_lookup -- a dictionary
+keyed by the matrix column index with values showing the column from the dataframe.  For dummy
+encoded dataframe columns it shows column.encoded_value.
+"""
+
 class DummyEncoder(TransformerMixin):
 
     def fit(self, X, y=None):
