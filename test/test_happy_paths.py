@@ -1,3 +1,12 @@
+"""
+Install pytest and other required packages below, and then run from
+top-level directory using the following command:
+
+        python -m pytest -v test/test_happy_paths.py
+
+TODO: Fix the test's dependency on data that are not in the repository
+"""
+
 import os
 import re
 import datetime
