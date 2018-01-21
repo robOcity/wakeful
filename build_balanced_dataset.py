@@ -12,7 +12,7 @@ if __name__ == '__main__':
                  ('./data/c2/iodine-raw', './data/home/2017-12-31'),
                  ('./data/c2/ptunnel', './data/home/2017-12-31')]
 
-    df_dict = preprocessing.pipeline(dir_pairs, log_types)
+    df_dict = preprocessing.preprocess(dir_pairs, log_types)
 
     for name, df in df_dict.items():
         dir_path = './data'

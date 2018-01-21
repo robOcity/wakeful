@@ -7,6 +7,11 @@ keyed by the matrix column index with values showing the column from the datafra
 encoded dataframe columns it shows column.encoded_value.
 """
 
+import pandas as pd
+import numpy as np
+from sklearn.base import TransformerMixin
+
+
 class DummyEncoder(TransformerMixin):
 
     def fit(self, X, y=None):

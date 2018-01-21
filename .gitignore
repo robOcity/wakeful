@@ -4,9 +4,9 @@ test/.cache/
 test/__pycache__/
 .idea
 .ipynb_checkpoints/
-eda/.ipynb_checkpoints/
 .RData
 .Rhistory
+.DS_Store
 *.bak
 *.swp
 .DS_Store
@@ -17,4 +17,7 @@ pelican.pid
 srv.pid
 *.log
 *.h5
-test/driver_app.py
+data/*
+wakeful.egg-info/
+build/
+dist/

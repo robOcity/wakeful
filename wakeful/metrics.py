@@ -8,6 +8,7 @@ import numpy as np
 import whois
 import datetime
 import dateutil.parser
+from . import ip_address_regex
 
 
 def calc_pcr(df, src_bytes_col='orig_bytes', dest_bytes_col='resp_bytes'):
@@ -87,3 +88,23 @@ def is_new_url(url, num_days=100, set_current_date=None):
         comparison_date = datetime.today()
     delta = comparison_date - url_info.creation_date
     return delta < datetime.timedelta(days=num_days)
+
+
+def is_ipv4(ip_address):
+    """
+    Predicate recognizes IPv4 'dotted quads' addresses.
+    :param ip_address: IP address string
+    :return: True if it is a valid IPv4 address, otherwise False
+    """
+    m = re.metch(ip_address_regex.ipv4_address, ip_address)
+    return m == None
+
+
+def is_ipv6(ip_address):
+    """
+    Predicate recognizes IPv6 'dotted quads' addresses.
+    :param ip_address: IP address string
+    :return: True if it is a valid IPv6 address, otherwise False
+    """
+    m = re.metch(ip_address_regex.ipv6_address, ip_address)
+    return m == None

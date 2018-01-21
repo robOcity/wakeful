@@ -1,10 +1,10 @@
 import os
+import datetime
+import pytest
 import pandas as pd
 import numpy as np
-import pytest
-from wakeful import log_munger, metrics
 import whois
-import datetime
+from wakeful import log_munger, metrics
 
 
 def test_bro_log_to_df(data_dir):
@@ -39,26 +39,6 @@ def test_bro_logs_to_df(data_dir):
     log_type = 'dns'
     bro_df = log_munger.bro_logs_to_df(os.path.join(data_dir), log_type)
     assert((31813, 23) == bro_df.shape)
-
-
-@pytest.fixture()
-def expected_df():
-    ROWS = 10
-    return pd.DataFrame(np.random.randn(ROWS, 1),
-                       columns=['A'],
-                       index=pd.date_range('20170101', periods=ROWS, freq='T'))
-
-
-@pytest.fixture(scope='session')
-def test_dir(tmpdir_factory):
-    test_dir = tmpdir_factory.mktemp('temp')
-    return test_dir
-
-
-@pytest.fixture(scope='session')
-def persist_path(test_dir):
-    test_filepath = test_dir.join('persistent_log_store.h5')
-    return test_filepath
 
 
 def test_df_to_hdf5(test_dir, expected_df):
@@ -104,7 +84,42 @@ def test_is_new_url():
     assert(metrics.is_new_url(url, set_current_date=created.isoformat()) == True)
 
 
+def test_is_ipv4():
+    good = '192.168.7.10'
+    bad = '256.100.200.200'
+    assert(metrics.is_ipv4(good) == True)
+    assert(metrics.is_ipv4(bad) == False)
+
+
+def test_is_ipv6():
+    good = '2001:db8::1'
+    bad = 'fe80::1ff:fe23:4567::890a'
+    assert(metrics.is_ipv4(good) == True)
+    assert(metrics.is_ipv4(bad) == False)
+
+
 # Fixtures -----------------------------------------------------------------
+
+@pytest.fixture()
+def expected_df():
+    ROWS = 10
+    return pd.DataFrame(np.random.randn(ROWS, 1),
+                       columns=['A'],
+                       index=pd.date_range('20170101', periods=ROWS, freq='T'))
+
+
+@pytest.fixture(scope='session')
+def test_dir(tmpdir_factory):
+    test_dir = tmpdir_factory.mktemp('temp')
+    return test_dir
+
+
+@pytest.fixture(scope='session')
+def persist_path(test_dir):
+    test_filepath = test_dir.join('persistent_log_store.h5')
+    return test_filepath
+
+
 @pytest.fixture()
 def pseudo_conn_log_df():
     return pd.DataFrame({'orig_bytes' : 5., 'resp_bytes' : 10.}, index=['a', 'b'])

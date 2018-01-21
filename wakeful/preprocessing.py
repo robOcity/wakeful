@@ -7,7 +7,7 @@ from sklearn.model_selection import train_test_split
 from . import log_munger, metrics
 
 
-def pipeline(dir_pairs, log_types):
+def preprocess(dir_pairs, log_types):
     MIN_SAMPLES = 100
     # TODO update functions that mutate dataframe to not have return statements
     kv_pairs = []
