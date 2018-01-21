@@ -2,10 +2,11 @@
 A module to calculate metrics based on the DNS and connection logs produced
 by the Bro Network Security Monitor.
 """
+import re
 import math
 import json
 import numpy as np
-import whois
+import whois # pip lists it as python-whois
 import datetime
 import dateutil.parser
 from . import ip_address_regex
@@ -96,8 +97,8 @@ def is_ipv4(ip_address):
     :param ip_address: IP address string
     :return: True if it is a valid IPv4 address, otherwise False
     """
-    m = re.metch(ip_address_regex.ipv4_address, ip_address)
-    return m == None
+    m = re.match(ip_address_regex.ipv4_address, ip_address)
+    return m != None
 
 
 def is_ipv6(ip_address):
@@ -106,5 +107,5 @@ def is_ipv6(ip_address):
     :param ip_address: IP address string
     :return: True if it is a valid IPv6 address, otherwise False
     """
-    m = re.metch(ip_address_regex.ipv6_address, ip_address)
-    return m == None
+    m = re.match(ip_address_regex.ipv6_address, ip_address)
+    return m != None

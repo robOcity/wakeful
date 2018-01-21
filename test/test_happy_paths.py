@@ -1,9 +1,10 @@
 import os
+import re
 import datetime
 import pytest
 import pandas as pd
 import numpy as np
-import whois
+import whois  # pip lists it as python-whois
 from wakeful import log_munger, metrics
 
 
@@ -94,8 +95,8 @@ def test_is_ipv4():
 def test_is_ipv6():
     good = '2001:db8::1'
     bad = 'fe80::1ff:fe23:4567::890a'
-    assert(metrics.is_ipv4(good) == True)
-    assert(metrics.is_ipv4(bad) == False)
+    assert(metrics.is_ipv6(good) == True)
+    assert(metrics.is_ipv6(bad) == False)
 
 
 # Fixtures -----------------------------------------------------------------
