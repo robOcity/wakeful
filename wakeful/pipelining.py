@@ -11,8 +11,11 @@ from sklearn.preprocessing import StandardScaler
 
 
 def modeling_pipeline():
-    pipe = make_pipeline(
-
+    pipe = Pipeline(
+        ('encoder', DummyEncoder()),
+        ('imputer', Imputer(strategy='most_frequent')),
+        ('standardscaler', StandardScaler()),
+        ('randomforestclassifier', RandomForestClassifier(random_state=37)),
     )
 
 

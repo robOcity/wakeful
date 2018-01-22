@@ -108,6 +108,16 @@ def test_is_ipv6():
     assert(metrics.is_ipv6(bad) == False)
 
 
+def test_calc_query_lenght():
+    query = 'google.com'
+    assert(metrics.calc_query_length(query) == 10)
+
+
+def test_calc_query_lenght():
+    answer = '172.217.1.206'
+    assert(metrics.calc_query_length(answer) == 13)
+
+
 # Fixtures -----------------------------------------------------------------
 
 @pytest.fixture()

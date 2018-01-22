@@ -19,3 +19,6 @@ if __name__ == '__main__':
         train, test = df
         log_munger.df_to_hdf5(train, name + '-train', dir_path)
         log_munger.df_to_hdf5(test, name + '-test', dir_path)
+        print()
+        print(name, 80*'-')
+        print(train.columns)

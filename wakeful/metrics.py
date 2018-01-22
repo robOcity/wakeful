@@ -30,7 +30,6 @@ def calc_pcr(df, src_bytes_col='orig_bytes', dest_bytes_col='resp_bytes'):
         raise e
 
 
-
 def calc_entropy(data, base=2):
     """
     Calculate the entropy of data. Using documentation from
@@ -109,3 +108,21 @@ def is_ipv6(ip_address):
     """
     m = re.match(ip_address_regex.ipv6_address, ip_address)
     return m != None
+
+
+def calc_query_length(query):
+    """
+    Calculate the length of DNS query.
+    :param query: query string
+    :return: Length of query string
+    """
+    return len(query)
+
+
+def calc_answer_length(answer):
+    """
+    Calculate the length of DNS answer to a query.
+    :param query: answer string
+    :return: Length of answer string
+    """
+    return len(answer)
