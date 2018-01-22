@@ -7,11 +7,13 @@ from sklearn.model_selection import train_test_split
 from . import log_munger, metrics
 
 CONN_LOG_DROP_COLS = cols_to_drop = ['conn_state', 'history', 'id.orig_h',
-              'id.resp_h', 'proto', 'service', 'tunnel_parents',
-              'uid', 'duration']
+              'id.resp_h', 'id.orig_p', 'id.resp_p', 'missed_bytes', 'proto', 'service',
+              'tunnel_parents', 'uid', 'duration', 'uid']
 
 DNS_LOG_DROP_COLS = ['TTLs', 'answers', 'AA', 'TC', 'RD', 'RA', 'Z', 'rejected',
-                     'qclass_name', 'qtype_name', 'query', 'rcode_name', 'trans_id']
+                     'qclass_name', 'qtype', 'qclass', 'qtype_name', 'query', 'rcode',
+                     'rcode_name', 'trans_id', 'id.orig_h', 'id.orig_p', 'id.resp_h',
+                     'id.resp_p', 'uid']
 
 
 def preprocess(dir_pairs, log_types):
@@ -28,7 +30,7 @@ def preprocess(dir_pairs, log_types):
                 continue
             norm_df = log_munger.bro_logs_to_df(norm_dir, log_type, logs=logs)
 
-            # process logs representing attack traffic
+            # process logs representing attack trafficdf.
             logs = log_munger.make_log_list(mal_dir, log_type)
             if not logs:
                 continue
@@ -48,7 +50,7 @@ def preprocess(dir_pairs, log_types):
                 df['is_ipv6_host'] = df['id.orig_h'].apply(metrics.is_ipv6)
                 df['is_ipv4_resp'] = df['id.resp_h'].apply(metrics.is_ipv4)
                 df['is_ipv6_resp'] = df['id.resp_h'].apply(metrics.is_ipv6)
-                df = drop_columns(df, cols_to_drop=CONN_LOG_DROP_COLS)
+                drop_columns(df, cols_to_drop=CONN_LOG_DROP_COLS)
             elif log_type.lower() == 'dns':
                 print('DNS', df.columns)
                 df['query_entropy'] = df['query'].apply(metrics.calc_entropy)
@@ -58,7 +60,7 @@ def preprocess(dir_pairs, log_types):
                 df['is_ipv6_host'] = df['id.orig_h'].apply(metrics.is_ipv6)
                 df['is_ipv4_resp'] = df['id.resp_h'].apply(metrics.is_ipv4)
                 df['is_ipv6_resp'] = df['id.resp_h'].apply(metrics.is_ipv6)
-                df = drop_columns(df, cols_to_drop=DNS_LOG_DROP_COLS)
+                drop_columns(df, cols_to_drop=DNS_LOG_DROP_COLS)
 
             # rebalance the training data
             if min(get_class_counts(df)) < MIN_SAMPLES:
@@ -82,7 +84,7 @@ def get_class_counts(df, label='label', pos_class=1, neg_class=0):
 
 
 def drop_columns(df, cols_to_drop=None):
-    return df.drop(cols_to_drop, axis=1)
+    df.drop(cols_to_drop, inplace=True, axis=1)
 
 
 def combine_dfs(norm_df, mal_df):
