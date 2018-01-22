@@ -11,6 +11,10 @@ If the answer to a DNS query cannot be found locally, it is resolved through a r
 
 Attackers use the communication channel that DNS provides to command and control remote processes, such as a botnet, and create tunnels to transfer information assets.  Detecting these malicious uses of the DNS protocol is what my project is all about.
 
+### Data Capture
+
+![DNS data capture using a network sensor](./images/gathering_dns_data.png)
+
 ### Feature Engineering
 1. Producer consumer ratio (PCR) is a "normalized value indicating directionality of application information transfer, independent of data load or rate."
     * PCR = (Source Bytes - Destination Bytes) / (Source Bytes + Destination Bytes)
