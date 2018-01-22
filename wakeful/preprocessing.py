@@ -34,6 +34,8 @@ def preprocess(dir_pairs, log_types):
             # metrics depend on specific data fields
             if log_type.lower() == 'conn':
                 df['pcr'] = metrics.calc_pcr(df)
+                df['is_ipv4'] = metrics.is_ipv4(df)
+                df['is_ipv6'] = metrics.is_ipv6(df)
             elif log_type.lower() == 'dns':
                 df['query_entropy'] = df['query'].apply(metrics.calc_entropy)
 
