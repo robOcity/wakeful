@@ -20,6 +20,12 @@ Attackers use the communication channel that DNS provides to command and control
     * PCR = (Source Bytes - Destination Bytes) / (Source Bytes + Destination Bytes)
     * -1.0 (consumer) <= PCR <= 1.0 (producer)
     * Example: For a compromised workstation, exfiltration represents a switch from consumer to producer
+2. Shannon entropy of the query string as a positive floating point value.
+3. Classify whether an IP address is IPv4 or IPv6.
+4. Length of the query string.
+5. Length of the answer string.
+6. Reputation of the URL from  [VirusTotal](https://www.virustotal.com/#/home/upload) data from 61 antivirus vendors.
+7. Categorize URL that have been registered during the last 100 days as new, others not.
 
 
 ### References
