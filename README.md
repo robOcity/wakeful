@@ -27,6 +27,11 @@ Attackers use the communication channel that DNS provides to command and control
 6. Reputation of the URL from  [VirusTotal](https://www.virustotal.com/#/home/upload) data from 61 antivirus vendors.
 7. Categorize URL that have been registered during the last 100 days as new, others not.
 
+### Feature Selection
+
+![Pair plot](./images/pair_plot.png)
+
+![LM plot](./images/lmplot.png)
 
 ### References
 * [Conference Presentation Slides: PCR - A New Flow Metric, Producer Consumer Ratio by Carter Bullard and John Gerth ](https://resources.sei.cmu.edu/asset_files/Presentation/2014_017_001_90063.pdf)
