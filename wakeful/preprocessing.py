@@ -1,8 +1,9 @@
 """
 Get set of normal and attack Bro logs and create a balanced dataset.
 """
+#TODO fix doc strings
 import os
-import pandas as pd
+from sklearn.utils import resample
 from sklearn.model_selection import train_test_split
 from . import log_munger, metrics
 
@@ -15,11 +16,13 @@ DNS_LOG_DROP_COLS = ['TTLs', 'answers', 'AA', 'TC', 'RD', 'RA', 'Z', 'rejected',
                      'rcode_name', 'trans_id', 'id.orig_h', 'id.orig_p', 'id.resp_h',
                      'id.resp_p', 'uid']
 
+RAND_SEED_VAL = 42
+
 
 def preprocess(dir_pairs, log_types):
     MIN_SAMPLES = 100
     # TODO update functions that mutate dataframe to not have return statements
-    kv_pairs = []
+    kv_pairs = {}
     for mal_dir, norm_dir in dir_pairs:
         norm_base, mal_base = os.path.basename(norm_dir), os.path.basename(mal_dir)
 
@@ -65,8 +68,19 @@ def preprocess(dir_pairs, log_types):
             # rebalance the training data
             if min(get_class_counts(df)) < MIN_SAMPLES:
                 continue
+            # first split
             train, test = train_test_rebalance_split(df)
-            kv_pairs.append((mal_base + '-' + norm_base + '-' + log_type, (train, test)))
+
+            # then only rebalance the training data
+            train_rebalanced = rebalance(train, column_name='label')
+
+            # drop rows with missing data
+            train_rebalanced = train_rebalanced.dropna(axis=0, how='any')
+            test = test.dropna(axis=0, how='any')
+
+            # organize them for later lookup
+            data_set_name = f'{mal_base}_{norm_base}_{log_type}'.replace('-', '_')
+            kv_pairs[data_set_name] = tuple((train_rebalanced, test))
 
     return dict(kv_pairs)
 
@@ -106,9 +120,7 @@ def combine_dfs(norm_df, mal_df):
 
 
 def train_test_rebalance_split(df):
-    train, test = train_test_split(df, random_state=37, test_size=0.5)
-    train_rebalanced = log_munger.rebalance(train, column_name='label')
-    return train_rebalanced, test
+    return train_test_split(df, random_state=37, test_size=0.5)
 
 
 def split_X_y(df, label='label'):
@@ -116,3 +128,25 @@ def split_X_y(df, label='label'):
     y = df.pop('label')
     # less the labels df is X
     return df, y
+
+
+def rebalance(df, column_name='label'):
+    """
+    Adds minority class values by resampling with replacement.
+    Apply this function to TRAINING data only, not testing!
+    :param df: pandas dataframe to balance
+    :param target: Name of the column holding the labels
+    :return: rebalanced data frame with rows added to the minority class
+    """
+    # balance classes by upsampling with replacement
+    df_neg = df[df[column_name] == 0]
+    df_pos = df[df[column_name] == 1]
+    num_to_gen = abs(df_neg.shape[0] - df_pos.shape[0])
+    df_pos_rebalanced = resample(df_pos,
+                                 replace=True,
+                                 random_state=RAND_SEED_VAL,
+                                 n_samples=num_to_gen)
+
+    # create the balanced data set
+    result = df_neg.append(df_pos_rebalanced)
+    return result

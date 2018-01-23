@@ -3,10 +3,8 @@ import glob
 import pandas as pd
 from bat.log_to_dataframe import LogToDataFrame
 from sklearn.model_selection import train_test_split
-from sklearn.utils import resample
 from collections import defaultdict
 
-RAND_SEED_VAL = 42
 
 
 def bro_log_to_df(file_path):
@@ -75,28 +73,6 @@ def hdf5_to_df(key, dir_path):
     # TODO DRY --> make into function
     file_path = os.path.join(dir_path, key + '.h5')
     return pd.read_hdf(file_path, key)
-
-
-def rebalance(df, column_name='label'):
-    """
-    Adds minority class values by resampling with replacement.
-    Apply this function to TRAINING data only, not testing!
-    :param df: pandas dataframe to balance
-    :param target: Name of the column holding the labels
-    :return: rebalanced data frame with rows added to the minority class
-    """
-    # balance classes by upsampling with replacement
-    df_neg = df[df[column_name] == 0]
-    df_pos = df[df[column_name] == 1]
-    num_to_gen = abs(df_neg.shape[0] - df_pos.shape[0])
-    df_pos_rebalanced = resample(df_pos,
-                                 replace=True,
-                                 random_state=RAND_SEED_VAL,
-                                 n_samples=num_to_gen)
-
-    # create the balanced data set
-    result = df_neg.append(df_pos_rebalanced)
-    return result
 
 
 def split_train_test(df, test_size=0.5):
