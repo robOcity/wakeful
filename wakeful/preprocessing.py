@@ -109,3 +109,10 @@ def train_test_rebalance_split(df):
     train, test = train_test_split(df, random_state=37, test_size=0.5)
     train_rebalanced = log_munger.rebalance(train, column_name='label')
     return train_rebalanced, test
+
+
+def split_X_y(df, label='label'):
+    # separate the labels from the data
+    y = df.pop('label')
+    # less the labels df is X
+    return df, y

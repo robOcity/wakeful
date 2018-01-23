@@ -14,17 +14,13 @@ from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 import matplotlib.pyplot as plt
 from mlxtend.feature_selection import SequentialFeatureSelector as SFS
 from mlxtend.plotting import plot_sequential_feature_selection as plot_sfs
-from . import log_munger
+from sklearn.metrics import f1_score
+from . import log_munger, preprocessing
 
 
-def modeling_pipeline(key, data_dir):
+def feature_selection_pipeline(train_df=None, test_df=None):
 
-    # read in the persisted dataframe
-    df = log_munger.hdf5_to_df(key, data_dir)
-
-    # separate the labels from the data
-    y = df.pop('label')
-    X = df
+    X_train, y_train = split_X_y(train_df)
 
     # create the transformers and estimators
     encoder = DummyEncoder()
@@ -38,20 +34,15 @@ def modeling_pipeline(key, data_dir):
               verbose=2,
               scoring='recall',
               cv=3)
-    # TODO - Figure out how to use a Feature Union to run these models in parallel using best features
-    boosting = GradientBoostingClassifier(n_estimators=100, min_samples_leaf=10)
-    # randomforest = RandomForestClassifier(n_estimators=100, min_samples_leaf=5)
-    # logistic = LogisticRegression()
 
     pipe = Pipeline(steps=[
         ('encoder', encoder),
         ('fillna', fillna),
         ('scaler', scaler),
         ('sfs', sfs),
-        ('boosting', boosting),
     ])
 
-    pipe.fit(X, y)
+    pipe.fit(X_train, y_train)
 
     print(80 * '-')
     print(pd.DataFrame.from_dict(sfs.get_metric_dict()).T)
@@ -64,14 +55,35 @@ def modeling_pipeline(key, data_dir):
     print('Selected features:', sfs.k_feature_idx_)
 
     fig = plot_sfs(sfs.get_metric_dict(), kind='std_err')
-    plt.title('Sequential Forward Selection (w/ standard error)')
+    plt.title('Sequential Forward Selection (w/ Std Dev)')
     plt.grid()
     plt.show()
+
+    X_test, y_test = split_X_y(test_df)
+    y_pred = boosting.predict(X_test)
+    print(f1_score(y_test, y_pred))
 
     # print('best combination (ACC: %.3f): %s\n' % (sfs.k_score_, sfs.k_feature_idx_))
     # print('all subsets:\n', sfs.subsets_)
     # plot_sfs(sfs.get_metric_dict(), kind='f1')
     # plt.show()
+
+
+def modeling_pipeline(estimator=None, X_train=None, y_train=None):
+
+    # objects to prepare the data
+    encoder = DummyEncoder()
+    fillna = Imputer(strategy='median')
+    scaler = StandardScaler()
+
+    pipe = Pipeline(steps=[
+        ('encoder', encoder),
+        ('fillna', fillna),
+        ('scaler', scaler),
+        ('estimator', estimator),
+    ])
+    pipe.fit(X_train, y_train)
+    return pipe, estimator
 
 
 class DummyEncoder(TransformerMixin, BaseEstimator):
