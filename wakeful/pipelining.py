@@ -20,7 +20,7 @@ from . import log_munger, preprocessing
 
 def feature_selection_pipeline(train_df=None, test_df=None):
 
-    X_train, y_train = split_X_y(train_df)
+    X_train, y_train = preprocessing.split_X_y(train_df)
 
     # create the transformers and estimators
     encoder = DummyEncoder()
@@ -28,7 +28,7 @@ def feature_selection_pipeline(train_df=None, test_df=None):
     scaler = StandardScaler()
     knn = KNeighborsClassifier(n_neighbors=5)
     sfs = SFS(knn,
-              k_features=5,
+              k_features=3,
               forward=True,
               floating=False,
               verbose=2,
