@@ -1,103 +1,198 @@
 
 
------ Estimator: gradient boosting ----- Data: iodine-forwarded-2017-12-31-conn ---------------------
+----- Estimator: gradient boosting ----- Data: iodine_forwarded_2017_12_31_conn_train ---------------------
 
-Area under ROC curve:  0.94507981312
+Area under ROC curve:  0.915616944701
 
-    True negatives  (correctly predicted normal use):    18291 (88.30%)
-    False positives (incorrectly predicted attacks):      2257 (10.90%)
+    True negatives  (correctly predicted normal use):    17091 (82.46%)
+    False positives (incorrectly predicted attacks):      3470 (16.74%)
     False negatives (incorrectly predicted normal use):      0 (0.00%)
     True positives  (correctly predicted attacks):         166 (0.80%)
     
 
 
------ Estimator: random forest ----- Data: iodine-forwarded-2017-12-31-conn ---------------------
+----- Estimator: random forest ----- Data: iodine_forwarded_2017_12_31_conn_train ---------------------
 
-Area under ROC curve:  0.929895853611
+Area under ROC curve:  0.959340499003
 
-    True negatives  (correctly predicted normal use):    20548 (99.20%)
+    True negatives  (correctly predicted normal use):    20561 (99.20%)
     False positives (incorrectly predicted attacks):         0 (0.00%)
     False negatives (incorrectly predicted normal use):    166 (0.80%)
     True positives  (correctly predicted attacks):           0 (0.00%)
     
 
 
------ Estimator: logistic regression ----- Data: iodine-forwarded-2017-12-31-conn ---------------------
+----- Estimator: logistic regression ----- Data: iodine_forwarded_2017_12_31_conn_train ---------------------
 
-Area under ROC curve:  0.621917590549
+Area under ROC curve:  0.808514540629
 
-    True negatives  (correctly predicted normal use):    16113 (77.79%)
-    False positives (incorrectly predicted attacks):      4435 (21.41%)
+    True negatives  (correctly predicted normal use):    20561 (99.20%)
+    False positives (incorrectly predicted attacks):         0 (0.00%)
     False negatives (incorrectly predicted normal use):    166 (0.80%)
     True positives  (correctly predicted attacks):           0 (0.00%)
     
 
 
------ Estimator: gradient boosting ----- Data: iodine-raw-2017-12-31-conn ---------------------
+----- Estimator: gradient boosting ----- Data: iodine_raw_2017_12_31_conn_train ---------------------
 
-Area under ROC curve:  0.916341843695
+Area under ROC curve:  0.916589884099
 
-    True negatives  (correctly predicted normal use):    17090 (83.00%)
-    False positives (incorrectly predicted attacks):      3434 (16.68%)
+    True negatives  (correctly predicted normal use):    17181 (83.05%)
+    False positives (incorrectly predicted attacks):      3440 (16.63%)
     False negatives (incorrectly predicted normal use):      0 (0.00%)
     True positives  (correctly predicted attacks):          66 (0.32%)
     
 
 
------ Estimator: random forest ----- Data: iodine-raw-2017-12-31-conn ---------------------
+----- Estimator: random forest ----- Data: iodine_raw_2017_12_31_conn_train ---------------------
 
-Area under ROC curve:  0.87631737862
+Area under ROC curve:  0.892355615708
 
-    True negatives  (correctly predicted normal use):    20524 (99.68%)
+    True negatives  (correctly predicted normal use):    20621 (99.68%)
     False positives (incorrectly predicted attacks):         0 (0.00%)
     False negatives (incorrectly predicted normal use):     66 (0.32%)
     True positives  (correctly predicted attacks):           0 (0.00%)
     
 
 
------ Estimator: logistic regression ----- Data: iodine-raw-2017-12-31-conn ---------------------
+----- Estimator: logistic regression ----- Data: iodine_raw_2017_12_31_conn_train ---------------------
 
-Area under ROC curve:  0.856669649132
+Area under ROC curve:  0.644771511243
 
-    True negatives  (correctly predicted normal use):    20524 (99.68%)
+    True negatives  (correctly predicted normal use):    17112 (82.72%)
+    False positives (incorrectly predicted attacks):      3509 (16.96%)
+    False negatives (incorrectly predicted normal use):     64 (0.31%)
+    True positives  (correctly predicted attacks):           2 (0.01%)
+    
+
+
+----- Estimator: gradient boosting ----- Data: dnscat2_2017_12_31_conn_train ---------------------
+
+Area under ROC curve:  0.916085777907
+
+    True negatives  (correctly predicted normal use):    17191 (77.55%)
+    False positives (incorrectly predicted attacks):      3467 (15.64%)
+    False negatives (incorrectly predicted normal use):      0 (0.00%)
+    True positives  (correctly predicted attacks):        1509 (6.81%)
+    
+
+
+----- Estimator: random forest ----- Data: dnscat2_2017_12_31_conn_train ---------------------
+
+Area under ROC curve:  0.928623293639
+
+    True negatives  (correctly predicted normal use):    20658 (93.19%)
     False positives (incorrectly predicted attacks):         0 (0.00%)
-    False negatives (incorrectly predicted normal use):     66 (0.32%)
+    False negatives (incorrectly predicted normal use):   1509 (6.81%)
     True positives  (correctly predicted attacks):           0 (0.00%)
     
 
 
------ Estimator: gradient boosting ----- Data: dnscat2-2017-12-31-conn ---------------------
+----- Estimator: logistic regression ----- Data: dnscat2_2017_12_31_conn_train ---------------------
 
-Area under ROC curve:  0.988530099357
+Area under ROC curve:  0.414221098683
 
-    True negatives  (correctly predicted normal use):    17109 (77.62%)
-    False positives (incorrectly predicted attacks):      3423 (15.53%)
-    False negatives (incorrectly predicted normal use):      0 (0.00%)
-    True positives  (correctly predicted attacks):        1509 (6.85%)
-    
-
-
------ Estimator: random forest ----- Data: dnscat2-2017-12-31-conn ---------------------
-
-Area under ROC curve:  0.990064289889
-
-    True negatives  (correctly predicted normal use):    20532 (93.15%)
-    False positives (incorrectly predicted attacks):         0 (0.00%)
-    False negatives (incorrectly predicted normal use):   1509 (6.85%)
+    True negatives  (correctly predicted normal use):    17467 (78.80%)
+    False positives (incorrectly predicted attacks):      3191 (14.40%)
+    False negatives (incorrectly predicted normal use):   1509 (6.81%)
     True positives  (correctly predicted attacks):           0 (0.00%)
     
 
 
------ Estimator: logistic regression ----- Data: dnscat2-2017-12-31-conn ---------------------
+----- Estimator: gradient boosting ----- Data: iodine_forwarded_2017_12_31_dns_train ---------------------
 
-Area under ROC curve:  0.783442116313
+Area under ROC curve:  0.211288112616
 
-    True negatives  (correctly predicted normal use):    15167 (68.81%)
-    False positives (incorrectly predicted attacks):      5365 (24.34%)
-    False negatives (incorrectly predicted normal use):      0 (0.00%)
-    True positives  (correctly predicted attacks):        1509 (6.85%)
+    True negatives  (correctly predicted normal use):    15896 (98.92%)
+    False positives (incorrectly predicted attacks):         0 (0.00%)
+    False negatives (incorrectly predicted normal use):    173 (1.08%)
+    True positives  (correctly predicted attacks):           0 (0.00%)
     
 
 
------ Estimator: gradient boosting ----- Data: iodine-forwarded-2017-12-31-dns ---------------------
+----- Estimator: random forest ----- Data: iodine_forwarded_2017_12_31_dns_train ---------------------
 
+Area under ROC curve:  0.5
+
+    True negatives  (correctly predicted normal use):        0 (0.00%)
+    False positives (incorrectly predicted attacks):     15896 (98.92%)
+    False negatives (incorrectly predicted normal use):      0 (0.00%)
+    True positives  (correctly predicted attacks):         173 (1.08%)
+    
+
+
+----- Estimator: logistic regression ----- Data: iodine_forwarded_2017_12_31_dns_train ---------------------
+
+Area under ROC curve:  0.627595992448
+
+    True negatives  (correctly predicted normal use):        0 (0.00%)
+    False positives (incorrectly predicted attacks):     15896 (98.92%)
+    False negatives (incorrectly predicted normal use):      0 (0.00%)
+    True positives  (correctly predicted attacks):         173 (1.08%)
+    
+
+
+----- Estimator: gradient boosting ----- Data: iodine_raw_2017_12_31_dns_train ---------------------
+
+Area under ROC curve:  0.2308009012
+
+    True negatives  (correctly predicted normal use):    15898 (99.59%)
+    False positives (incorrectly predicted attacks):         0 (0.00%)
+    False negatives (incorrectly predicted normal use):     66 (0.41%)
+    True positives  (correctly predicted attacks):           0 (0.00%)
+    
+
+
+----- Estimator: random forest ----- Data: iodine_raw_2017_12_31_dns_train ---------------------
+
+Area under ROC curve:  0.230859036967
+
+    True negatives  (correctly predicted normal use):    15898 (99.59%)
+    False positives (incorrectly predicted attacks):         0 (0.00%)
+    False negatives (incorrectly predicted normal use):     66 (0.41%)
+    True positives  (correctly predicted attacks):           0 (0.00%)
+    
+
+
+----- Estimator: logistic regression ----- Data: iodine_raw_2017_12_31_dns_train ---------------------
+
+Area under ROC curve:  0.802474677585
+
+    True negatives  (correctly predicted normal use):    11974 (75.01%)
+    False positives (incorrectly predicted attacks):      3924 (24.58%)
+    False negatives (incorrectly predicted normal use):      7 (0.04%)
+    True positives  (correctly predicted attacks):          59 (0.37%)
+    
+
+
+----- Estimator: gradient boosting ----- Data: dnscat2_2017_12_31_dns_train ---------------------
+
+Area under ROC curve:  0.196632551623
+
+    True negatives  (correctly predicted normal use):        0 (0.00%)
+    False positives (incorrectly predicted attacks):     15907 (91.37%)
+    False negatives (incorrectly predicted normal use):      0 (0.00%)
+    True positives  (correctly predicted attacks):        1503 (8.63%)
+    
+
+
+----- Estimator: random forest ----- Data: dnscat2_2017_12_31_dns_train ---------------------
+
+Area under ROC curve:  0.803367448377
+
+    True negatives  (correctly predicted normal use):        0 (0.00%)
+    False positives (incorrectly predicted attacks):     15907 (91.37%)
+    False negatives (incorrectly predicted normal use):      0 (0.00%)
+    True positives  (correctly predicted attacks):        1503 (8.63%)
+    
+
+
+----- Estimator: logistic regression ----- Data: dnscat2_2017_12_31_dns_train ---------------------
+
+Area under ROC curve:  0.5
+
+    True negatives  (correctly predicted normal use):        0 (0.00%)
+    False positives (incorrectly predicted attacks):     15907 (91.37%)
+    False negatives (incorrectly predicted normal use):      0 (0.00%)
+    True positives  (correctly predicted attacks):        1503 (8.63%)
+    

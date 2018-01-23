@@ -8,12 +8,12 @@ if __name__ == '__main__':
     data_dir = './data/'
 
     keys = [
-        ('iodine-forwarded-2017-12-31-conn-test', 'iodine-forwarded-2017-12-31-conn-train'),
-        ('iodine-raw-2017-12-31-conn-test', 'iodine-raw-2017-12-31-conn-train'),
-        ('dnscat2-2017-12-31-conn-test', 'dnscat2-2017-12-31-conn-train'),
-        ('iodine-forwarded-2017-12-31-dns-test', 'iodine-forwarded-2017-12-31-dns-train'),
-        ('iodine-raw-2017-12-31-dns-test', 'iodine-raw-2017-12-31-dns-train'),
-        ('dnscat2-2017-12-31-dns-test', 'dnscat2-2017-12-31-dns-train'),]
+        ('iodine_forwarded_2017_12_31_conn_test', 'iodine_forwarded_2017_12_31_conn_train'),
+        ('iodine_raw_2017_12_31_conn_test', 'iodine_raw_2017_12_31_conn_train'),
+        ('dnscat2_2017_12_31_conn_test', 'dnscat2_2017_12_31_conn_train'),
+        ('iodine_forwarded_2017_12_31_dns_test', 'iodine_forwarded_2017_12_31_dns_train'),
+        ('iodine_raw_2017_12_31_dns_test', 'iodine_raw_2017_12_31_dns_train'),
+        ('dnscat2_2017_12_31_dns_test', 'dnscat2_2017_12_31_dns_train'),]
 
     for test_key, train_key in keys:
         # read in the persisted dataframe
@@ -30,8 +30,8 @@ if __name__ == '__main__':
 
         # classifiers to evaluate
         models = {
-            'gradient boosting': GradientBoostingClassifier(n_estimators=200, min_samples_leaf=10),
-            'random forest': RandomForestClassifier(n_estimators=100, min_samples_leaf=5),
+            'gradient boosting':   GradientBoostingClassifier(n_estimators=200, min_samples_leaf=10),
+            'random forest':       RandomForestClassifier(n_estimators=100, min_samples_leaf=5),
             'logistic regression': LogisticRegression(C=1e5),
         }
 
@@ -42,7 +42,7 @@ if __name__ == '__main__':
                                                             y_train=y_train)
 
             scoring.print_scores(estimator_name=estimator_name,
-                                 data_name=train_key[:train_key.rfind('-')],
+                                 data_name=train_key,
                                  estimator=trained_estimator,
                                  X_test=X_test.values,
                                  y_test=y_test.values)

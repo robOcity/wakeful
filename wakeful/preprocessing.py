@@ -12,7 +12,7 @@ CONN_LOG_DROP_COLS = cols_to_drop = ['conn_state', 'history', 'id.orig_h',
               'tunnel_parents', 'uid', 'duration', 'uid']
 
 DNS_LOG_DROP_COLS = ['TTLs', 'answers', 'AA', 'TC', 'RD', 'RA', 'Z', 'rejected',
-                     'qclass_name', 'qtype', 'qclass', 'qtype_name', 'query', 'rcode',
+                     'qclass_name', 'qtype', 'qclass', 'qtype_name', 'query', 'proto', 'rcode',
                      'rcode_name', 'trans_id', 'id.orig_h', 'id.orig_p', 'id.resp_h',
                      'id.resp_p', 'uid']
 
