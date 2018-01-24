@@ -25,11 +25,11 @@ if __name__ == '__main__':
     ])
 
     data_dir = 'data/'
-    fig_dir = 'plot/'
+    fig_dir = 'plots/'
     for test_key, train_key in persisted_df_paths.items():
         train_df = log_munger.hdf5_to_df(train_key, data_dir)
         test_df = log_munger.hdf5_to_df(test_key, data_dir)
-        df_dict = pipelining.feature_selection_pipeline(train_df=train_df,
+        pipelining.feature_selection_pipeline(train_df=train_df,
                                                         test_df=test_df,
                                                         fig_dir=fig_dir,
                                                         fig_file=fig_name(test_key),

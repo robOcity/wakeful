@@ -10,14 +10,17 @@ from sklearn.pipeline import Pipeline
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.preprocessing import StandardScaler, Imputer
 from sklearn.neighbors import KNeighborsClassifier
-import matplotlib.pyplot as plt
 from mlxtend.feature_selection import SequentialFeatureSelector as SFS
 from mlxtend.plotting import plot_sequential_feature_selection as plot_sfs
 from . import preprocessing
+import matplotlib
+import matplotlib.pyplot as plt
+
 
 
 def feature_selection_pipeline(train_df=None, test_df=None, fig_dir=None, fig_file=None, fig_title=None):
 
+    # get features and labels
     X_train, y_train = preprocessing.split_X_y(train_df)
 
     # create the transformers and estimators
@@ -40,36 +43,32 @@ def feature_selection_pipeline(train_df=None, test_df=None, fig_dir=None, fig_fi
         ('sfs', sfs),
     ])
 
+    # fit the pipe start to finish
     pipe.fit(X_train, y_train)
 
-    print(80 * '-')
+    # produce output
+    print(f'{fig_title :_<80}')
     print(pd.DataFrame.from_dict(sfs.get_metric_dict()).T)
     print()
 
-    print(80 * '-')
+    print(100 * '-')
     print(pd.DataFrame.from_dict(encoder.matrix_lookup_, orient='index').T)
     print()
 
-    print('Selected features:', sfs.k_feature_idx_)
+    print(100 * '-')
+    print('selected features:', sfs.k_feature_idx_)
+    print('\nbest combination: (ACC: %.3f): %s\n' % (sfs.k_score_, sfs.k_feature_idx_))
+    print('all subsets:\n', sfs.subsets_)
 
-    fig = plot_sfs(sfs.get_metric_dict(), kind='std_err')
-    plt.title('Sequential Forward Selection (w/ Std Dev)')
-
+    plt.title(fig_title)
     plt.grid()
-    if all([fig_dir, fig_file, fig_title]):
-        plt.savefig(os.path.join(fig_dir, fig_file))
-    else:
-        plt.show()
+    plot_sfs(sfs.get_metric_dict(), kind='std_err')
+    plt.savefig(os.path.join(fig_dir, fig_file), dpi=300)
+    plt.close()
 
-
-    # print('best combination (ACC: %.3f): %s\n' % (sfs.k_score_, sfs.k_feature_idx_))
-    # print('all subsets:\n', sfs.subsets_)
-    # plot_sfs(sfs.get_metric_dict(), kind='f1')
-    # plt.show()
 
 
 def modeling_pipeline(estimator=None, X_train=None, y_train=None):
-
     # objects to prepare the data
     encoder = DummyEncoder()
     fillna = Imputer(strategy='median')
@@ -97,6 +96,7 @@ class DummyEncoder(TransformerMixin, BaseEstimator):
     from the dataframe.  For dummy encoded dataframe columns it shows
     column.encoded_value.
     """
+
     def fit(self, X, y=None):
         # record info here, use in transform, inv_transform.
         self.columns_ = X.columns
@@ -104,7 +104,7 @@ class DummyEncoder(TransformerMixin, BaseEstimator):
         self.non_cat_cols_ = X.columns.drop(self.cat_cols_)
 
         self.cat_map_ = {col: X[col].cat for col in self.cat_cols_}
-        left = len(self.non_cat_cols_) # 2
+        left = len(self.non_cat_cols_)  # 2
         self.cat_blocks_ = {}
 
         for col in self.cat_cols_:
@@ -118,7 +118,7 @@ class DummyEncoder(TransformerMixin, BaseEstimator):
                            for k, v in self.cat_map_.items()
                            for v in v.categories.get_values()]
         all_matrix_cols = list(self.non_cat_cols_.get_values()) + cat_matrix_cols
-        self.matrix_lookup_ = {i:v for i, v in enumerate(all_matrix_cols)}
+        self.matrix_lookup_ = {i: v for i, v in enumerate(all_matrix_cols)}
 
         return self
 
