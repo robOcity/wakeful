@@ -42,7 +42,7 @@ if __name__ == '__main__':
                                                             y_train=y_train)
 
             scoring.print_scores(estimator_name=estimator_name,
-                                 data_name=train_key,
+                                 data_name=test_key,
                                  estimator=trained_estimator,
                                  X_test=X_test.values,
                                  y_test=y_test.values)
