@@ -3,6 +3,7 @@ All the scikit learn pipeline functionality and classes used in the
 project are kept here.
 """
 
+import os
 import pandas as pd
 import numpy as np
 from sklearn.pipeline import Pipeline
@@ -12,11 +13,10 @@ from sklearn.neighbors import KNeighborsClassifier
 import matplotlib.pyplot as plt
 from mlxtend.feature_selection import SequentialFeatureSelector as SFS
 from mlxtend.plotting import plot_sequential_feature_selection as plot_sfs
-from sklearn.metrics import f1_score
 from . import preprocessing
 
 
-def feature_selection_pipeline(train_df=None, test_df=None):
+def feature_selection_pipeline(train_df=None, test_df=None, fig_dir=None, fig_file=None, fig_title=None):
 
     X_train, y_train = preprocessing.split_X_y(train_df)
 
@@ -54,12 +54,13 @@ def feature_selection_pipeline(train_df=None, test_df=None):
 
     fig = plot_sfs(sfs.get_metric_dict(), kind='std_err')
     plt.title('Sequential Forward Selection (w/ Std Dev)')
-    plt.grid()
-    plt.show()
 
-    X_test, y_test = split_X_y(test_df)
-    y_pred = boosting.predict(X_test)
-    print(f1_score(y_test, y_pred))
+    plt.grid()
+    if all([fig_dir, fig_file, fig_title]):
+        plt.savefig(os.path.join(fig_dir, fig_file))
+    else:
+        plt.show()
+
 
     # print('best combination (ACC: %.3f): %s\n' % (sfs.k_score_, sfs.k_feature_idx_))
     # print('all subsets:\n', sfs.subsets_)
