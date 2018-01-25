@@ -1,4 +1,6 @@
 import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 from wakeful import preprocessing, pipelining, scoring, log_munger
@@ -29,9 +31,15 @@ def main():
 
     # create dataframe
     print(results)
+    df = pd.DataFrame.from_records(results)
+    print(df.head())
 
     # make plot using seaborn box plot
-
+    # Set up the matplotlib figure
+    # f, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(8, 6), sharex=True)
+    # y2 = y1 - 5
+    # sns.barplot(x, y2, palette="RdBu_r", ax=ax2)
+    # ax2.set_ylabel("Diverging")
 
 def leave_one_out(train_df, test_df, key):
     results = []
