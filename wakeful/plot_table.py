@@ -18,15 +18,15 @@ df = pd.DataFrame(data, columns=columns, index=rows).T
 sns.set()
 
 with sns.plotting_context():
-    f, ax = plt.subplots(1, 1, figsize=(6, 5))
-    plt.subplots_adjust(hspace=.15)
-    ax.set_xlabel('Data Source\nMalware', fontsize=18)
-    ax.set_ylabel('Model', fontsize=18)
+    f, ax = plt.subplots(1, 1, figsize=(7, 5))
     plt.title('Model Evaluation Results\nArea Under Curve', fontsize=18)
     ax = sns.heatmap(df,
                      annot=True,
                      fmt='.2f',
                      cmap=sns.color_palette('BuGn'))
 
+    plt.subplots_adjust(hspace=.15)
+    ax.set_xlabel('Model', fontsize=18)
+    ax.set_ylabel('Data Source - Malware', fontsize=18)
     plt.tight_layout(pad=0.9)
     plt.show()
