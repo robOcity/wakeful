@@ -15,12 +15,13 @@ def print_scores(estimator_name=None, data_name=None, estimator=None, X_test=Non
                'tp': tp, 'tp_prct': 100*tp/total,
                }
 
-    print("""
-    Area under ROC curve:                                      {:.2f}%
-    True negatives  (correctly predicted normal use):   {:6d} ({:.2f}%)
-    False positives (incorrectly predicted attacks):    {:6d} ({:.2f}%)
-    False negatives (incorrectly predicted normal use): {:6d} ({:.2f}%)
-    True positives  (correctly predicted attacks):      {:6d} ({:.2f}%)
-    """.format(results))
+    fmt = f"""
+    Area under ROC curve:                                        {auc:.2f}%
+    True negatives  (correctly predicted normal use):   {tn:6d} ({tn_prct:.2f}%)
+    False positives (incorrectly predicted attacks):    {fp:6d} ({fp_prct:.2f}%)
+    False negatives (incorrectly predicted normal use): {fn:6d} ({fn_prct:.2f}%)
+    True positives  (correctly predicted attacks):      {tp:6d} ({tp_prct:.2f}%)
+    """
+    print(fmt)
 
     return results

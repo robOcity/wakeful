@@ -15,7 +15,7 @@ def main():
         ('dnscat2_2017_12_31_conn_test', 'dnscat2_2017_12_31_conn_train'),
         ('iodine_forwarded_2017_12_31_dns_test', 'iodine_forwarded_2017_12_31_dns_train'),
         ('iodine_raw_2017_12_31_dns_test', 'iodine_raw_2017_12_31_dns_train'),
-        ('dnscat2_2017_12_31_dns_test', 'dnscat2_2017_12_31_dns_train'),]
+        ('dnscat2_2017_12_31_dns_test', 'dnscat2_2017_12_31_dns_train')]
 
     results = []
     for test_key, train_key in keys:
@@ -24,6 +24,9 @@ def main():
         test_df = log_munger.hdf5_to_df(test_key, data_dir)
 
         # list of dicts with scoring of leave-one-out modeling results
+        print(type(test_df))
+        print(test_df.head())
+
         result = leave_one_out(train_df, test_df, test_key)
 
         # grow the list
@@ -41,16 +44,17 @@ def main():
     # sns.barplot(x, y2, palette="RdBu_r", ax=ax2)
     # ax2.set_ylabel("Diverging")
 
+
 def leave_one_out(train_df, test_df, key):
     results = []
-    print(test_df.columns())
-    for feature_removed in test_df.columns():
+    print(test_df.columns)
+    for feature_removed in test_df.columns:
 
         # remove one feature and see how the models do
         train_df = train_df.drop(feature_removed, axis=1)
         test_df = test_df.drop(feature_removed, axis=1)
 
-        # TODO add to preprocessing
+        # drop rows with empty values
         train_df = train_df.dropna(axis=0, how='any')
         test_df = test_df.dropna(axis=0, how='any')
 
@@ -71,7 +75,7 @@ def leave_one_out(train_df, test_df, key):
                                                             y_train=y_train)
 
             result = scoring.print_scores(estimator_name=estimator_name,
-                                 data_name=train_key,
+                                 data_name=key,
                                  estimator=trained_estimator,
                                  X_test=X_test.values,
                                  y_test=y_test.values)

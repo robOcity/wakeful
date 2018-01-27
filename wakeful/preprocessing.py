@@ -19,7 +19,7 @@ DNS_LOG_DROP_COLS = ['TTLs', 'answers', 'AA', 'TC', 'RD', 'RA', 'Z', 'rejected',
 RAND_SEED_VAL = 42
 
 
-def preprocess(dir_pairs, log_types):
+def preprocess(dir_pairs, log_types, comm_drop_cols=CONN_LOG_DROP_COLS, dsn_drop_cols=DNS_LOG_DROP_COLS):
     MIN_SAMPLES = 100
     # TODO update functions that mutate dataframe to not have return statements
     kv_pairs = {}
