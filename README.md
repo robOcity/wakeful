@@ -1,6 +1,7 @@
 # Wakeful - A watch dog for DNS traffic
 
-Rob Osterburg, Galvanize DSI Fellow
+Rob Osterburg, Galvanize Data Science Immersive Capstone
+
 
 ### Motivation
 IP addresses are hard to remember.  DNS maps domain names to IP addresses eliminating the need.  This makes for happy users and also provides a perfect backchannel for attackers to communicate unhindered through firewalls.
@@ -73,10 +74,7 @@ Boosting and random forest models performed the best for classifying connections
 ### References
 * [Conference Presentation Slides: PCR - A New Flow Metric, Producer Consumer Ratio by Carter Bullard and John Gerth ](https://resources.sei.cmu.edu/asset_files/Presentation/2014_017_001_90063.pdf)
 * [Conference Talk Video: Security Onion 2016: C2 Phone Home - Eric Conrad](https://youtu.be/ViR405l-ggg)
-* [Conference Talk Video: Chris McCubbin,  Machine learning applied to Bro](https://youtu.be/ZV5Ckf9wLrc)
+* [Conference Talk Video: Machine learning applied to Bro by Chris McCubbin](https://youtu.be/ZV5Ckf9wLrc)
 * [Conference Talk Video: Data Analysis, Machine Learning, Bro, and You! by Brian Wylie](https://youtu.be/pG5lU9CLnIU)
-* [Documentation: BNSM DNS Log](https://www.bro.org/sphinx/scripts/base/protocols/dns/main.bro.html#type-DNS::Info)
-* [Documentation: BNSM ICMP Log](https://www.bro.org/sphinx/scripts/base/bif/plugins/Bro_ICMP.events.bif.bro.html)
-* [Documentation: BNSM Conn Log](https://www.bro.org/sphinx/scripts/base/protocols/conn/main.bro.html#type-Conn::Info)
-* [Figure: DNS caching (Lion Kimbro - Own work, Public Domain)]( https://commons.wikimedia.org/w/index.php?curid=386501)
-* [Figure: DNS name resolution sequence (Lion Kimbro - Own work, Public Domain)](https://commons.wikimedia.org/w/index.php?curid=386517)
+* [Documentation: BNSM Domain Name Log Data Elements](https://www.bro.org/sphinx/scripts/base/protocols/dns/main.bro.html#type-DNS::Info)
+* [Documentation: BNSM Connnection Log Data Elements](https://www.bro.org/sphinx/scripts/base/protocols/conn/main.bro.html#type-Conn::Info)
