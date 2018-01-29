@@ -3,11 +3,12 @@
 Rob Osterburg, Galvanize DSI Fellow
 
 ### Motivation
-Mapping domain names to IP addresses, DNS is an essential service and access to it is pervasive.  Its importance to network operations means that it is routinely available for good uses and bad.
+IP addresses are hard to remember.  DNS maps domain names to IP addresses eliminating the need.  This makes for happy users and also provides a perfect backchannel for attackers to communicate unhindered through firewalls.
+
 
 ![DNS caching](./images/DNS_caching_forwarding.png)
 
-If the answer to a DNS query cannot be found locally, it is resolved through a recursive series of requests to find a server that can.  By registering domain names, attackers can easily route DNS traffic to their own servers.  Encoded within these packets is the information they seek to transmit.
+Attackers use DNS to steal information assets and command and control botnets.  My project focuses on detecting malicious uses of the DNS protocol.
 
 ![DNS name resolution](./images/DNS_name_resolution.png)
 
