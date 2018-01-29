@@ -6,35 +6,69 @@ Rob Osterburg, Galvanize DSI Fellow
 IP addresses are hard to remember.  DNS maps domain names to IP addresses eliminating the need.  This makes for happy users and also provides a perfect backchannel for attackers to communicate unhindered through firewalls.
 
 
-![DNS caching](./images/DNS_caching_forwarding.png)
+![DNS caching](./images/attack_conceptual.png)
 
 Attackers use DNS to steal information assets and command and control botnets.  My project focuses on detecting malicious uses of the DNS protocol.
 
-![DNS name resolution](./images/DNS_name_resolution.png)
 
-Attackers use the communication channel that DNS provides to command and control remote processes, such as a botnet, and create tunnels to transfer information assets.  Detecting these malicious uses of the DNS protocol is what my project is all about.
+### Goals
 
-### Data Capture
+* Research methods and engineer features for detecting misuse of the DNS protocol.
+
+* Select best features and evaluate models for predicting malicious use.
+
+* Gain experience applying machine learning to cyber security.
+
+
+### Data
+Security Onion is a distribution of Linux focused on network monitoring and includes the Bro Network Security Monitor (BNSM) that was used to gather all data for this project.  Monitoring my home network with BNSM, I was able to capture roughly 40,000 DNS and 80,000 connection log entries over a period of two weeks.
 
 ![DNS data capture using a network sensor](./images/gathering_dns_data.png)
 
+After finding DNS tunneling “in the wild”, Eric Conrad shared the logs files from three of these attacks on his blog.  These log files contained roughly 6,500 DNS and 3,500 connection log entries.  I used sampling with replacement to rebalance this minority class in my training datasets for each different type of malware.
+
+
 ### Feature Engineering
-1. Producer consumer ratio (PCR) is a "normalized value indicating directionality of application information transfer, independent of data load or rate."
-    * PCR = (Source Bytes - Destination Bytes) / (Source Bytes + Destination Bytes)
-    * -1.0 (consumer) <= PCR <= 1.0 (producer)
-    * Example: For a compromised workstation, exfiltration represents a switch from consumer to producer
-2. Shannon entropy of the query string as a positive floating point value.
-3. Classify whether an IP address is IPv4 or IPv6.
-4. Length of the query string.
-5. Length of the answer string.
-6. Reputation of the URL from  [VirusTotal](https://www.virustotal.com/#/home/upload) data from 61 antivirus vendors.
-7. Categorize URL that have been registered during the last 100 days as new, others not.
+1. Producer consumer ratio (PCR) indicates the directionality of information transfer.
+
+1. Shannon entropy of the query string.
+
+1. URL reputation using VirusTotal RESTful API.
+
+1. Classify newly registered URLs using whois.
+
+1. Length of the query string and answer string.
+
 
 ### Feature Selection
 
 ![Pair plot](./images/pair_plot.png)
 
-![LM plot](./images/lmplot.png)
+
+### Data Pipeline
+
+![Data processing pipeline](./images/DataFlow.png)
+
+### Results
+To select features, I first removed those that caused data leakage, including IP addresses and port numbers.  Then I used sequential feature selection to identify a set of three features for both the connection and DNS logs that minimized recall (tp / tp + fn), since missing actual attacks represents the highest risk to the organization.
+
+![Model comparison by malware type](./images/Model_Results.png)
+
+Boosting and random forest models performed the best for classifying connections, and logistic regression did best for DNS traffic.  More feature engineering work is needed to improve the models performance on the DNS log.
+
+### Next Steps
+* Model the history of a connection using a Markov chain.
+
+* Use information gain as a feature for classifying DNS queries and answers.
+
+* Develop a virtual lab to generate more consistent datasets.
+
+* Create an application to alert when attacks are detected.
+
+
+### Tech Stack
+
+![Technologies used in my project.](./images/Tech_Stack.png)
 
 ### References
 * [Conference Presentation Slides: PCR - A New Flow Metric, Producer Consumer Ratio by Carter Bullard and John Gerth ](https://resources.sei.cmu.edu/asset_files/Presentation/2014_017_001_90063.pdf)
