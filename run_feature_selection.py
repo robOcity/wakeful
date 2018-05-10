@@ -44,7 +44,9 @@ def feature_selection_pipeline(train_df=None, test_df=None, fig_dir=None, fig_fi
     #indices = np.argsort(-values)[::-1]
     #plot_feature_importance("./plots/feature_importances", column_names[indices], values[indices])
     indices = np.argsort(values)[::-1]
-    plot_feature_importance_sns("./plots/feature_importances", column_names[indices][:5], values[indices][:5])
+    num_features = 5
+    print(f'Explained variance top-{num_features} featurs is {sum(values[indices][:num_features])}')
+    plot_feature_importance_sns("./plots/feature_importances", column_names[indices][:num_features], values[indices][:num_features])
 
 def plot_feature_importance(plot_path, names, values):
     f, ax = plt.subplots(1, 1, figsize=(7, 5))
