@@ -39,21 +39,39 @@ def feature_selection_pipeline(train_df=None, test_df=None, fig_dir=None, fig_fi
     plotting_df = pd.DataFrame.from_records(data, columns=labels)
     print(plotting_df)
     print(len(column_names), len(extree.feature_importances_))
-    plot_feature_importance(column_names, extree.feature_importances_)
+    # reverse sort the values from most to least important
+    values = extree.feature_importances_
+    #indices = np.argsort(-values)[::-1]
+    #plot_feature_importance("./plots/feature_importances", column_names[indices], values[indices])
+    indices = np.argsort(values)[::-1]
+    plot_feature_importance_sns("./plots/feature_importances", column_names[indices][:5], values[indices][:5])
 
-
-def plot_feature_importance(names, values):
-    indices = np.argsort(-values)[::-1]
+def plot_feature_importance(plot_path, names, values):
     f, ax = plt.subplots(1, 1, figsize=(7, 5))
     pos = np.arange(len(names)) + 0.5
-    plt.barh(pos, values[indices], align='center')
+    plt.barh(pos, values, align='center')
     plt.title("Feature Importance")
     plt.xlabel("Explained Variance")
     plt.ylabel("Feature")
-    plt.yticks(pos, names[indices])
+    plt.yticks(pos, names)
     plt.grid(True)
     plt.tight_layout(pad=0.9)
-    plt.savefig("./plots/feature_importances")
+    plt.savefig(plot_path)
+
+def plot_feature_importance_sns(plot_path, names, values):
+    f, ax = plt.subplots(1, 1, figsize=(7, 5))
+    plt.title('Feature Selection')
+    ax.set_xlim([0, 1])
+    
+    sns.barplot(x=values, 
+                y=names, 
+                palette=sns.color_palette('BuGn_r'))
+    ax.set_xlabel('Importance')
+    ax.set_ylabel('Feature')
+    sns.despine(offset=10)
+    with plt.style.context('seaborn-poster'):
+        plt.tight_layout(pad=0.8)
+        plt.savefig(plot_path+'_sns')
 
 def plot_bar_chart(plotting_df):
     f, ax = plt.subplots(1, 1, figsize=(7, 5))
@@ -64,10 +82,11 @@ def plot_bar_chart(plotting_df):
                 y='feature', 
                 data=plotting_df, 
                 palette=sns.color_palette('BuGn_r'))
-    # ax.set_xlabel('Importance', fontsize=12)
-    # ax.set_ylabel('Feature', fontsize=12)
+    ax.set_xlabel('Importance', fontsize=12)
+    ax.set_ylabel('Feature', fontsize=12)
     sns.despine(offset=10)
-    with plt.style.context('seaborn-poster'):
+    #with plt.style.context('seaborn-poster'):
+    with sns.axes_style('darkgrid'):
         plt.tight_layout(pad=0.8)
         plt.show()
 
