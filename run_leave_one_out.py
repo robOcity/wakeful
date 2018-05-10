@@ -50,6 +50,10 @@ def leave_one_out(train_df, test_df, key):
     print(test_df.columns)
     for feature_removed in test_df.columns:
 
+        # always keep the label 
+        if feature_removed == 'label':
+            continue
+
         # remove one feature and see how the models do
         train_df = train_df.drop(feature_removed, axis=1)
         test_df = test_df.drop(feature_removed, axis=1)
