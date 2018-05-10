@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns; sns.set()
 
+PLOT_PATH = './plots/model_auc'
+
 # TODO - pass in data
 data = [[ 0.916085777907, 0.915616944701, 0.916589884099, 0.196632551623,  0.211288112616, 0.2308009012],
         [ 0.928623293639, 0.954780749378, 0.901791421807, 0.803367448377,  0.211257749068, 0.230859036967],
@@ -29,4 +31,4 @@ with sns.plotting_context():
     ax.set_xlabel('Model', fontsize=18)
     ax.set_ylabel('Data Source - Malware', fontsize=18)
     plt.tight_layout(pad=0.9)
-    plt.show()
+    plt.savefig(PLOT_PATH)
