@@ -15,11 +15,11 @@ def print_scores(estimator_name=None, data_name=None, estimator=None, X_test=Non
                'tp': tp, 'tp_prct': 100*tp/total,
                }
     #TODO extract values from the results dictionary then create the formatted strings
-    # auc = f'''Area under ROC curve:                                        {auc:.2f}%'''
-    # tn  = f'''True negatives  (correctly predicted normal use):   {tn:6d} ({results.get('tn_prct'):.2f}%)'''
-    # fp  = f'''False positives (incorrectly predicted attacks):    {fp:6d} ({fp_prct:.2f}%)'''
-    # fn  = f'''False negatives (incorrectly predicted normal use): {fn:6d} ({fn_prct:.2f}%)'''
-    # tp  = f'''True positives  (correctly predicted attacks):      {tp:6d} ({tp_prct:.2f}%)'''
+    # auc = f'''Area under ROC curve:                               {results.get('auc'):.2f}%'''
+    # tn  = f'''True negatives  (correctly predicted normal use):   {results.get('tn'):6d} ({results.get('tn_prct'):.2f}%)'''
+    # fp  = f'''False positives (incorrectly predicted attacks):    {results.get('fp'):6d} ({results.get('fp_prct'):.2f}%)'''
+    # fn  = f'''False negatives (incorrectly predicted normal use): {results.get('fn'):6d} ({results.get('fn_prct'):.2f}%)'''
+    # tp  = f'''True positives  (correctly predicted attacks):      {results.get('tp'):6d} ({results.get('tp_prct'):.2f}%)'''
     
     # print(fmt)
 
