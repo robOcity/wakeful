@@ -4,7 +4,7 @@ Rob Osterburg, Galvanize Data Science Immersive Capstone
 
 
 ### Motivation
-IP addresses are hard to remember.  DNS maps domain names to IP addresses eliminating the need.  This makes for happy users and also provides a perfect backchannel for attackers to communicate unhindered through firewalls.
+DNS maps domain names to an IP address eliminating the need.  This makes for happy users while also providing a perfect backchannel for attackers to communicate unhindered through firewalls.
 
 
 ![DNS caching](./images/attack_conceptual.png)
